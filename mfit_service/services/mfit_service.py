@@ -26,7 +26,7 @@ class MfitService():
         self._db_context = repositories.DBContext(
             connection_string=self._configuration['repositories']['PostgreSQL']['connection_string'])
 
-    def bind_repository_many(self, blah):
+    def bind_repository_many(self, repositories):
 
         """
         Returns None
@@ -40,7 +40,7 @@ class MfitService():
             mfit_service.repositories.IRepository interface.
         """
 
-        for repository in blah:
+        for repository in repositories:
             repository_ = repository(db_context=self._db_context)
             setattr(self, repository_.__class__.__name__, repository_)
 
