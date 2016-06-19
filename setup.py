@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import importlib
 import setuptools
 import shutil
 import site
@@ -34,7 +35,7 @@ if __name__ == '__main__':
 
     # The configuration file needs to be included because the code
     # relies on relative paths.
-    reload(site)
+    importlib.reload(site)
 
     if sys.argv[1] == 'install':
         for path in sys.path:
