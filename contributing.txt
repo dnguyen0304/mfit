@@ -1,0 +1,11 @@
+Database
+- Naming Convention
+    - Use lowercase delimited by underscores.
+    - Tables must be named with the plural form of each entity.
+    - Tables must have a primary key.
+    - Primary keys should be surrogate keys.
+    - Primary keys must include the singular form of the entity name.
+    - Column constraints should trend towards being restrictive.
+    - For constraints, trend towards being more restrictive.
+    - Data type lengths should trend towards being more relaxed.
+    - Tables must include metadata fields.
