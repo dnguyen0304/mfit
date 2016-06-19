@@ -24,7 +24,7 @@ class BaseRepository(IRepository):
 
         primary_key = sqlalchemy.inspect(self._model).primary_key[0]
         entity = self._db_context.query(self._model) \
-                                 .filter_by(**{primary_key.name: entity_it}) \
+                                 .filter_by(**{primary_key.name: entity_id}) \
                                  .one()
         return entity
 
