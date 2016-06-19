@@ -26,15 +26,37 @@ class DBContext():
         self._SessionFactory = sqlalchemy.orm.scoped_session(SessionFactory)
         self._session = self._SessionFactory()
 
-    """
-    def query(self, *args, **kwargs):
-
     def add(self, entity):
+
+        """
+        See the mfit_service.repositories.BaseRepository source
+        documentation for more details.
+        """
+
         self._session.add(entity)
 
     def remove(self, entity):
+
+        """
+        See the mfit_service.repositories.BaseRepository source
+        documentation for more details.
+        """
+
         self._session.delete(entity)
-    """
+
+    def query(self, model, *args, **kwargs):
+
+        """
+        See the mfit_service.repositories.BaseRepository source
+        documentation for more details.
+
+        Parameters
+        ----------
+        model : Variable
+            Domain model class.
+        """
+
+        return self._session.query(model)
 
     def commit(self):
 
@@ -45,6 +67,16 @@ class DBContext():
         """
 
         self._session.commit()
+
+    def rollback(self):
+
+        """
+        Returns None
+
+        Rollback the transaction.
+        """
+
+        self._session.rollback()
 
     def dispose(self):
 
