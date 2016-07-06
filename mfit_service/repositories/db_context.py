@@ -4,6 +4,10 @@ import datetime
 
 import sqlalchemy
 
+from mfit_service.repositories.users_repository import UsersRepository
+from mfit_service.repositories.workouts_repository import WorkoutsRepository
+from mfit_service.repositories.users_workouts_repository import UsersWorkoutsRepository
+
 
 class DBContext:
 
@@ -32,11 +36,13 @@ class DBContext:
         self._SessionFactory = sqlalchemy.orm.scoped_session(SessionFactory)
         self._session = self._SessionFactory()
 
-    def query(self, model, *args, **kwargs):
+    def query(self, model):
 
         """
-        See the mfit_service.repositories.BaseRepository source
-        documentation for more details.
+        Returns None
+
+        This is a decorator method. See the
+        sqlalchemy.orm.session.Session documentation for more details.
 
         Parameters
         ----------
@@ -44,7 +50,13 @@ class DBContext:
             Domain model class.
         """
 
-        return self._session.query(model)
+        # TODO(duyn): How does a developer know this must be updated?
+        repositories = [UsersRepository,
+                        WorkoutsRepository,
+                        UsersWorkoutsRepository]
+
+        registry = {repository.__name__: repository for repository in repositories}
+        return registry[model.__name__ + 'Repository'](self._session)
 
     def add(self, entity, created_by=None, updated_by=None):
 
