@@ -46,30 +46,29 @@ class DBContext:
 
         return self._session.query(model)
 
-    def add(self, entity):
-
-        """
-        See the mfit_service.repositories.BaseRepository source
-        documentation for more details.
-        """
-
-        self._session.add(entity)
-
-    def add(self, entity, created_by=-1):
+    def add(self, entity, created_by=None, updated_by=None):
 
         """
         Returns None
 
         Add the new entity to the database.
 
+        This is a decorator method. See the
+        sqlalchemy.orm.session.Session documentation for more details.
+
         Parameters
         ----------
         entity : Variable
             Domain model instance.
+        created_by : datetime.datetime
+        updated_by : datetime.datetime
         """
 
         entity.created_on = datetime.datetime.utcnow()
         entity.created_by = created_by
+        entity.updated_by = updated_by
+
+        self._session.add(entity)
 
     def refresh(self):
 
