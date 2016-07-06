@@ -19,11 +19,3 @@ class IRepository:
     def get_all(self):
         pass
 
-    @abstractmethod
-    def add(self, entity):
-        pass
-
-    @abstractmethod
-    def remove(self, entity):
-        pass
-
