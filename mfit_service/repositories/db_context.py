@@ -57,15 +57,6 @@ class DBContext:
         entity.created_on = datetime.datetime.utcnow()
         entity.created_by = created_by
 
-    def remove(self, entity):
-
-        """
-        See the mfit_service.repositories.BaseRepository source
-        documentation for more details.
-        """
-
-        self._session.delete(entity)
-
     def query(self, model, *args, **kwargs):
 
         """
@@ -79,36 +70,6 @@ class DBContext:
         """
 
         return self._session.query(model)
-
-    def commit(self):
-
-        """
-        Returns None
-
-        Commit the local changes to the database.
-        """
-
-        self._session.commit()
-
-    def rollback(self):
-
-        """
-        Returns None
-
-        Rollback the transaction.
-        """
-
-        self._session.rollback()
-
-    def dispose(self):
-
-        """
-        Returns None
-
-        Close the database connection.
-        """
-
-        self._session.close()
 
     def refresh(self):
 
@@ -127,6 +88,6 @@ class DBContext:
 
         # Should this dispose the engine, close the connection, and/or
         # close the session?
-        self.dispose()
+        self._session.close()
         self._session = self._SessionFactory()
 
