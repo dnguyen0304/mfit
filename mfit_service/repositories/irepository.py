@@ -3,7 +3,7 @@
 from abc import ABCMeta, abstractmethod
 
 
-class IRepository():
+class IRepository:
 
     __metaclass__ = ABCMeta
 
