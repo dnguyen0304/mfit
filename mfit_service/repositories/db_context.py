@@ -3,7 +3,7 @@
 import sqlalchemy
 
 
-class DBContext():
+class DBContext:
 
     def __init__(self, connection_string, **kwargs):
 
@@ -34,6 +34,22 @@ class DBContext():
         """
 
         self._session.add(entity)
+
+    def add(self, entity, created_by=-1):
+
+        """
+        Returns None
+
+        Add the new entity to the database.
+
+        Parameters
+        ----------
+        entity : Variable
+            Domain model instance.
+        """
+
+        entity.created_on = datetime.datetime.utcnow()
+        entity.created_by = created_by
 
     def remove(self, entity):
 
