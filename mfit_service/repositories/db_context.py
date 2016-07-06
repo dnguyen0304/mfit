@@ -32,6 +32,20 @@ class DBContext:
         self._SessionFactory = sqlalchemy.orm.scoped_session(SessionFactory)
         self._session = self._SessionFactory()
 
+    def query(self, model, *args, **kwargs):
+
+        """
+        See the mfit_service.repositories.BaseRepository source
+        documentation for more details.
+
+        Parameters
+        ----------
+        model : Variable
+            Domain model class.
+        """
+
+        return self._session.query(model)
+
     def add(self, entity):
 
         """
@@ -56,20 +70,6 @@ class DBContext:
 
         entity.created_on = datetime.datetime.utcnow()
         entity.created_by = created_by
-
-    def query(self, model, *args, **kwargs):
-
-        """
-        See the mfit_service.repositories.BaseRepository source
-        documentation for more details.
-
-        Parameters
-        ----------
-        model : Variable
-            Domain model class.
-        """
-
-        return self._session.query(model)
 
     def refresh(self):
 
