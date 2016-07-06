@@ -8,7 +8,7 @@ class IRepository:
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def __init__(self, db_context):
+    def __init__(self, session):
         pass
 
     @abstractmethod
