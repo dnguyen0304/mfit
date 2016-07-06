@@ -12,6 +12,10 @@ class DBContext:
         """
         Open a database connection.
 
+        This is a decorator class that extends the SQLAlchemy Session
+        object. See the sqlalchemy.orm.session.Session documentation
+        for more details.
+
         Parameters
         ----------
         connection_string : String
