@@ -7,7 +7,7 @@ import sqlalchemy
 
 class DBContext:
 
-    def __init__(self, connection_string, **kwargs):
+    def __init__(self, connection_string):
 
         """
         Open a database connection.
