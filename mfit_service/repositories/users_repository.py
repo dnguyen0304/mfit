@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from mfit_service.models import Users
-from mfit_service.repositories import BaseRepository
+from mfit_service.repositories.base_repository import BaseRepository
 
 
 class UsersRepository(BaseRepository):
