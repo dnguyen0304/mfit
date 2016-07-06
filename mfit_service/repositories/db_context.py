@@ -51,8 +51,6 @@ class DBContext:
         """
         Returns None
 
-        Add the new entity to the database.
-
         This is a decorator method. See the
         sqlalchemy.orm.session.Session documentation for more details.
 
@@ -60,15 +58,38 @@ class DBContext:
         ----------
         entity : Variable
             Domain model instance.
-        created_by : datetime.datetime
-        updated_by : datetime.datetime
+        created_by : datetime.datetime, default None
+            Unique identifier for the user who created the entity. This
+            parameter is required only when the entity is being
+            created.
+        updated_by : datetime.datetime, default None
+            Unique identifier for the user who updated the entity. This
+            parameter is required only when the entity is being
+            updated.
         """
 
-        entity.created_on = datetime.datetime.utcnow()
-        entity.created_by = created_by
-        entity.updated_by = updated_by
+        should_be_added = True
+        message = 'add() missing 1 required positional argument: "{}"'
 
-        self._session.add(entity)
+        entity_state = sqlalchemy.inspect(entity)
+
+        if entity_state.transient:
+            if not created_by:
+                raise TypeError(message.format('created_by'))
+            else:
+                entity.created_on = datetime.datetime.utcnow()
+                entity.created_by = created_by
+        elif entity_state.persistent:
+            if entity not in self._session.dirty:
+                should_be_added = False
+            elif not updated_by:
+                raise TypeError(message.format('updated_by'))
+            else:
+                entity.updated_on = datetime.datetime.utcnow()
+                entity.updated_by = updated_by
+
+        if should_be_added:
+            self._session.add(entity)
 
     def refresh(self):
 
