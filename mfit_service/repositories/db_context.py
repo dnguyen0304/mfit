@@ -90,3 +90,6 @@ class DBContext:
         self._session.close()
         self._session = self._SessionFactory()
 
+    def __getattr__(self, name):
+        return getattr(self._session, name)
+
