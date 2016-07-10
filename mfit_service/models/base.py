@@ -5,7 +5,7 @@ from sqlalchemy.ext.declarative import as_declarative
 
 
 @as_declarative()
-class Base():
+class Base:
 
     # TODO (duyn): Do you need to specify the column name if it is 
     # identical to the attribute?

@@ -13,9 +13,9 @@ class Workouts(models.Base):
     workout_id = Column(primary_key=True)
     name = Column()
 
-    # users = relationship('Users',
-    #                      secondary='users_workouts',
-    #                      back_populates='workouts')
+    users = relationship('Users',
+                         secondary='users_workouts',
+                         back_populates='workouts')
     # movements = relationship('WorkoutsMovements', back_populates='workouts')
 
     def __init__(self, name):

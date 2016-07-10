@@ -3,12 +3,12 @@
 from abc import ABCMeta, abstractmethod
 
 
-class IRepository():
+class IRepository:
 
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def __init__(self, db_context):
+    def __init__(self, session):
         pass
 
     @abstractmethod
@@ -17,13 +17,5 @@ class IRepository():
 
     @abstractmethod
     def get_all(self):
-        pass
-
-    @abstractmethod
-    def add(self, entity):
-        pass
-
-    @abstractmethod
-    def remove(self, entity):
         pass
 

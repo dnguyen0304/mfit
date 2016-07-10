@@ -1,14 +1,24 @@
 # -*- coding: utf-8 -*-
 
+import datetime
+
 import sqlalchemy
 
+from mfit_service.repositories.users_repository import UsersRepository
+from mfit_service.repositories.workouts_repository import WorkoutsRepository
+from mfit_service.repositories.users_workouts_repository import UsersWorkoutsRepository
 
-class DBContext():
 
-    def __init__(self, connection_string, **kwargs):
+class DBContext:
+
+    def __init__(self, connection_string):
 
         """
         Open a database connection.
+
+        This is a decorator class that extends the SQLAlchemy Session
+        object. See the sqlalchemy.orm.session.Session documentation
+        for more details.
 
         Parameters
         ----------
@@ -26,29 +36,13 @@ class DBContext():
         self._SessionFactory = sqlalchemy.orm.scoped_session(SessionFactory)
         self._session = self._SessionFactory()
 
-    def add(self, entity):
+    def query(self, model):
 
         """
-        See the mfit_service.repositories.BaseRepository source
-        documentation for more details.
-        """
+        Returns None
 
-        self._session.add(entity)
-
-    def remove(self, entity):
-
-        """
-        See the mfit_service.repositories.BaseRepository source
-        documentation for more details.
-        """
-
-        self._session.delete(entity)
-
-    def query(self, model, *args, **kwargs):
-
-        """
-        See the mfit_service.repositories.BaseRepository source
-        documentation for more details.
+        This is a decorator method. See the
+        sqlalchemy.orm.session.Session documentation for more details.
 
         Parameters
         ----------
@@ -56,37 +50,58 @@ class DBContext():
             Domain model class.
         """
 
-        return self._session.query(model)
+        # TODO(duyn): How does a developer know this must be updated?
+        repositories = [UsersRepository,
+                        WorkoutsRepository,
+                        UsersWorkoutsRepository]
 
-    def commit(self):
+        registry = {repository.__name__: repository for repository in repositories}
+        return registry[model.__name__ + 'Repository'](self._session)
 
-        """
-        Returns None
-
-        Commit the local changes to the database.
-        """
-
-        self._session.commit()
-
-    def rollback(self):
+    def add(self, entity, created_by=None, updated_by=None):
 
         """
         Returns None
 
-        Rollback the transaction.
+        This is a decorator method. See the
+        sqlalchemy.orm.session.Session documentation for more details.
+
+        Parameters
+        ----------
+        entity : Variable
+            Domain model instance.
+        created_by : datetime.datetime, default None
+            Unique identifier for the user who created the entity. This
+            parameter is required only when the entity is being
+            created.
+        updated_by : datetime.datetime, default None
+            Unique identifier for the user who updated the entity. This
+            parameter is required only when the entity is being
+            updated.
         """
 
-        self._session.rollback()
+        should_be_added = True
+        message = 'add() missing 1 required positional argument: "{}"'
 
-    def dispose(self):
+        entity_state = sqlalchemy.inspect(entity)
 
-        """
-        Returns None
+        if entity_state.transient:
+            if not created_by:
+                raise TypeError(message.format('created_by'))
+            else:
+                entity.created_on = datetime.datetime.utcnow()
+                entity.created_by = created_by
+        elif entity_state.persistent:
+            if entity not in self._session.dirty:
+                should_be_added = False
+            elif not updated_by:
+                raise TypeError(message.format('updated_by'))
+            else:
+                entity.updated_on = datetime.datetime.utcnow()
+                entity.updated_by = updated_by
 
-        Close the database connection.
-        """
-
-        self._session.close()
+        if should_be_added:
+            self._session.add(entity)
 
     def refresh(self):
 
@@ -105,6 +120,9 @@ class DBContext():
 
         # Should this dispose the engine, close the connection, and/or
         # close the session?
-        self.dispose()
+        self._session.close()
         self._session = self._SessionFactory()
+
+    def __getattr__(self, name):
+        return getattr(self._session, name)
 

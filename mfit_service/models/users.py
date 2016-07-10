@@ -15,9 +15,9 @@ class Users(models.Base):
     first_name = Column()
     last_name = Column()
 
-    # workouts = relationship('Workouts',
-    #                         secondary='users_workouts',
-    #                         back_populates='users')
+    workouts = relationship('Workouts',
+                            secondary='users_workouts',
+                            back_populates='users')
 
     def __init__(self, email_address, first_name, last_name):
 
