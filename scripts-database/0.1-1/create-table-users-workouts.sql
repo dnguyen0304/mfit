@@ -4,6 +4,8 @@ CREATE TABLE users_workouts (
 	user_workout_id		serial						PRIMARY KEY,
 	user_id				int							REFERENCES users (user_id),
 	workout_id			int							REFERENCES workouts (workout_id),
+	started_on			timestamp,
+	ends_on				timestamp,
 	created_on			timestamp	NOT NULL		DEFAULT CURRENT_TIMESTAMP,
 	created_by			int			NOT NULL,
 	updated_on			timestamp,
