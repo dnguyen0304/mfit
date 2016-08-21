@@ -4,37 +4,15 @@ import datetime
 
 import sqlalchemy
 
-from mfit_service.repositories.users_repository import UsersRepository
-from mfit_service.repositories.workouts_repository import WorkoutsRepository
-from mfit_service.repositories.users_workouts_repository import UsersWorkoutsRepository
+from mfit_service.repositories.base_repository import BaseRepository
 
 
 class DBContext:
 
-    def __init__(self, connection_string):
-
-        """
-        Open a database connection.
-
-        This is a decorator class that extends the SQLAlchemy Session
-        object. See the sqlalchemy.orm.session.Session documentation
-        for more details.
-
-        Parameters
-        ----------
-        connection_string : String
-            Formatted string containing host and authentication
-            information.
-        """
-
-        url = 'postgresql+psycopg2://' + connection_string
-
-        engine = sqlalchemy.create_engine(url)
-        SessionFactory = sqlalchemy.orm.sessionmaker()
-        SessionFactory.configure(bind=engine)
-
-        self._SessionFactory = sqlalchemy.orm.scoped_session(SessionFactory)
-        self._session = self._SessionFactory()
+    def __init__(self, session):
+        # Composition must be used instead of inheritance because the
+        # SQLAlchemy Session is always accessed through a factory.
+        self._session = session
 
     def query(self, model):
 
@@ -50,13 +28,11 @@ class DBContext:
             Domain model class.
         """
 
-        # TODO(duyn): How does a developer know this must be updated?
-        repositories = [UsersRepository,
-                        WorkoutsRepository,
-                        UsersWorkoutsRepository]
+        repositories = {class_.__name__: class_
+                        for class_
+                        in BaseRepository.__subclasses__()}
 
-        registry = {repository.__name__: repository for repository in repositories}
-        return registry[model.__name__ + 'Repository'](self._session)
+        return repositories[model.__name__ + 'Repository'](self._session)
 
     def add(self, entity, created_by=None, updated_by=None):
 
@@ -102,26 +78,6 @@ class DBContext:
 
         if should_be_added:
             self._session.add(entity)
-
-    def refresh(self):
-
-        """
-        Returns None
-
-        Reset the state of the database context.
-
-        This method is intended to provide a convenient way of managing
-        database context scope.
-
-        Related Links
-        -------------
-        1. http://stackoverflow.com/a/12223711
-        """
-
-        # Should this dispose the engine, close the connection, and/or
-        # close the session?
-        self._session.close()
-        self._session = self._SessionFactory()
 
     def __getattr__(self, name):
         return getattr(self._session, name)
