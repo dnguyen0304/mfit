@@ -1,25 +1,21 @@
 # -*- coding: utf-8 -*-
 
 from sqlalchemy import Column
-from sqlalchemy.orm import relationship
 
 from mfit_service import models
 
 
-class Workouts(models.Base):
+class WorkoutsMovementsUnits(models.Base):
 
-    __tablename__ = 'workouts'
+    __tablename__ = 'workouts_movements_units'
 
-    workout_id = Column(primary_key=True)
+    workout_movement_unit_id = Column(primary_key=True)
     name = Column()
-
-    users = relationship('UsersWorkouts', back_populates='workout')
-    movements = relationship('WorkoutsMovements', back_populates='workout')
 
     def __init__(self, name):
 
         """
-        Workouts model.
+        Workouts movements units model.
 
         Parameters
         ----------

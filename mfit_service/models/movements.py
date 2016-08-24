@@ -6,20 +6,20 @@ from sqlalchemy.orm import relationship
 from mfit_service import models
 
 
-class Workouts(models.Base):
+class Movements(models.Base):
 
-    __tablename__ = 'workouts'
+    __tablename__ = 'movements'
 
-    workout_id = Column(primary_key=True)
+    movement_id = Column(primary_key=True)
     name = Column()
 
-    users = relationship('UsersWorkouts', back_populates='workout')
-    movements = relationship('WorkoutsMovements', back_populates='workout')
+    workouts = relationship('WorkoutsMovements', back_populates='movement')
+    users_workouts = relationship('UsersWorkoutsMovements', back_populates='movement')
 
     def __init__(self, name):
 
         """
-        Workouts model.
+        Movements model.
 
         Parameters
         ----------

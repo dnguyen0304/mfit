@@ -7,7 +7,7 @@ from sqlalchemy.ext.declarative import as_declarative
 @as_declarative()
 class Base:
 
-    # TODO (duyn): Do you need to specify the column name if it is 
+    # TODO (duyn): Do you need to specify the column name if it is
     # identical to the attribute?
     created_on = Column()
     created_by = Column()
