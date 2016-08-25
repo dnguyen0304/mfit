@@ -5,7 +5,6 @@ CREATE TABLE users_workouts_movements (
 	user_workout_id				int			NOT NULL		REFERENCES users_workouts (user_workout_id),
 	movement_id					int			NOT NULL		REFERENCES movements (movement_id),
 	sets_remaining				smallint	NOT NULL,
-	days_remaining				smallint	NOT NULL,
 	created_on					timestamp	NOT NULL		DEFAULT CURRENT_TIMESTAMP,
 	created_by					int			NOT NULL,
 	updated_on					timestamp,

@@ -14,8 +14,6 @@ class UsersWorkoutsMovements(models.Base):
     user_workout_id = Column(ForeignKey('users_workouts.user_workout_id'))
     movement_id = Column(ForeignKey('movements.movement_id'))
     sets_remaining = Column()
-    # TODO(duyn): this is not necessary
-    days_remaining = Column()
 
     user_workout = relationship('UsersWorkouts', back_populates='movements')
     movement = relationship('Movements', back_populates='users_workouts')
@@ -23,8 +21,7 @@ class UsersWorkoutsMovements(models.Base):
     def __init__(self,
                  user_workout,
                  movement,
-                 sets_remaining,
-                 days_remaining):
+                 sets_remaining):
 
         """
         Users workouts movements model.
@@ -42,13 +39,11 @@ class UsersWorkoutsMovements(models.Base):
         self.user_workout_id = user_workout.user_workout_id
         self.movement_id = movement.movement_id
         self.sets_remaining = sets_remaining
-        self.days_remaining = days_remaining
 
     def __repr__(self):
-        repr_ = '{}(user_workout={}, movement={}, sets_remaining={}, days_remaining={})'
+        repr_ = '{}(user_workout={}, movement={}, sets_remaining={})'
         return repr_.format(self.__class__.__name__,
                             self.user_workout,
                             self.movement,
-                            self.sets_remaining,
-                            self.days_remaining)
+                            self.sets_remaining)
 
