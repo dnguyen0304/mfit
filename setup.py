@@ -25,7 +25,6 @@ if __name__ == '__main__':
                      author_email='dnguyen0304@gmail.com',
                      packages=[project_name,
                                project_name + '.models',
-                               project_name + '.repositories',
                                project_name + '.services'],
                      install_requires=install_requires,
                      test_suite='nose.collector',
