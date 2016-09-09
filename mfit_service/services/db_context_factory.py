@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import sqlalchemy
+import sqlalchemy.orm
 
-from mfit_service.repositories.db_context import DBContext
+from mfit_service import services
 
 
 class DBContextFactory:
@@ -10,7 +11,7 @@ class DBContextFactory:
     def __init__(self, connection_string):
 
         """
-        Open a database connection.
+        Factory class for producing DBContext objects.
 
         This is a decorator class that extends the SQLAlchemy Session
         Maker object. See the sqlalchemy.orm.session.sessionmaker
@@ -31,9 +32,13 @@ class DBContextFactory:
 
         self._SessionFactory = sqlalchemy.orm.scoped_session(SessionFactory)
 
-    def produce(self):
+    def create(self):
 
         """
+        Returns mfit_service.services.DBContext
+
+        Produces an object configured as specified.
+
         Related Links
         -------------
         1. http://stackoverflow.com/a/12223711
@@ -42,5 +47,5 @@ class DBContextFactory:
         # Should this dispose the engine, close the connection, and/or
         # close the session?
         session = self._SessionFactory()
-        return DBContext(session=session)
+        return services.DBContext(session=session)
 

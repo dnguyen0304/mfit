@@ -4,35 +4,27 @@ import datetime
 
 import sqlalchemy
 
-from mfit_service.repositories.base_repository import BaseRepository
-
 
 class DBContext:
 
     def __init__(self, session):
-        # Composition must be used instead of inheritance because the
-        # SQLAlchemy Session is always accessed through a factory.
-        self._session = session
-
-    def query(self, model):
 
         """
-        Returns None
+        Manages persistence operations for ORM-mapped objects.
 
-        This is a decorator method. See the
-        sqlalchemy.orm.session.Session documentation for more details.
+        This is a decorator class that extends the SQLAlchemy Session
+        Maker object. See the sqlalchemy.orm.session.Session
+        documentation for more details.
 
         Parameters
         ----------
-        model : Variable
-            Domain model class.
+        session : sqlalchemy.orm.session.Session
+            Session instance.
         """
 
-        repositories = {class_.__name__: class_
-                        for class_
-                        in BaseRepository.__subclasses__()}
-
-        return repositories[model.__name__ + 'Repository'](self._session)
+        # Composition must be used instead of inheritance because the
+        # SQLAlchemy Session is always accessed through a factory.
+        self._session = session
 
     def add(self, entity, created_by=None, updated_by=None):
 
@@ -62,7 +54,7 @@ class DBContext:
         entity_state = sqlalchemy.inspect(entity)
 
         if entity_state.transient:
-            if not created_by:
+            if created_by is None:
                 raise TypeError(message.format('created_by'))
             else:
                 entity.created_on = datetime.datetime.utcnow()
@@ -70,7 +62,7 @@ class DBContext:
         elif entity_state.persistent:
             if entity not in self._session.dirty:
                 should_be_added = False
-            elif not updated_by:
+            elif updated_by is None:
                 raise TypeError(message.format('updated_by'))
             else:
                 entity.updated_on = datetime.datetime.utcnow()
