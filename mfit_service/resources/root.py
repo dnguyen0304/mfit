@@ -13,11 +13,11 @@ class Root(resources.Base):
             'self': services.api.url_for(Root, _external=True)
         }
 
-        data = [services.api.url_for(resources.UsersCollection, _external=True),
-                services.api.url_for(resources.WorkoutsCollection, _external=True),
-                services.api.url_for(resources.MovementsCollection, _external=True)]
+        uris = {'users_uri': services.api.url_for(resources.UsersCollection, _external=True),
+                'workouts_uri': services.api.url_for(resources.WorkoutsCollection, _external=True),
+                'movements_uri': services.api.url_for(resources.MovementsCollection, _external=True)}
 
-        body = collections.OrderedDict([('links', links), ('data', data)])
+        body = collections.OrderedDict([('uris', uris), ('links', links)])
 
         return body
 
