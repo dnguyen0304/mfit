@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import collections
-
 import flask
 import flask_restful
 import sqlalchemy
@@ -62,13 +60,8 @@ class Users(resources.Base):
             'self': Users.get_self_link(user=user)
         }
 
-        data = {
-            'type': 'users',
-            'id': str(user.user_id),
-            'attributes': user.to_json()
-        }
-
-        body = collections.OrderedDict([('links', links), ('data', data)])
+        body = user.to_json()
+        body.update({'links': links})
 
         return body
 

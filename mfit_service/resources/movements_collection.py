@@ -16,13 +16,13 @@ class MovementsCollection(resources.Base):
             'self': services.api.url_for(MovementsCollection, _external=True)
         }
 
-        data = []
+        movements = []
 
-        body = collections.OrderedDict([('links', links), ('data', data)])
+        body = collections.OrderedDict([('movements', movements), ('links', links)])
 
         for movement in self._db_context.query(models.Movements).all():
             self_link = resources.Movements.get_self_link(movement=movement)
-            data.append(self_link)
+            movements.append(self_link)
 
         return body
 
