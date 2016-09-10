@@ -13,9 +13,9 @@ class Root(resources.Base):
             'self': services.api.url_for(Root, _external=True)
         }
 
-        relationships = {'users_uri': services.api.url_for(resources.UsersCollection, _external=True),
-                         'workouts_uri': services.api.url_for(resources.WorkoutsCollection, _external=True),
-                         'movements_uri': services.api.url_for(resources.MovementsCollection, _external=True)}
+        relationships = {'users': services.api.url_for(resources.UsersCollection, _external=True),
+                         'workouts': services.api.url_for(resources.WorkoutsCollection, _external=True),
+                         'movements': services.api.url_for(resources.MovementsCollection, _external=True)}
 
         body = collections.OrderedDict([('relationships', relationships), ('links', links)])
 
