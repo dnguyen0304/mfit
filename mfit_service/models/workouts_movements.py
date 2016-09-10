@@ -56,7 +56,7 @@ class WorkoutsMovements(models.Base):
         self.sets = sets
         self.value = value
         self.workout_movement_unit_id = workout_movement_unit.workout_movement_unit_id
-        #TODO(duyn): should set this in the repository
+        # TODO (duyn): Should this be set in the DBContext?
         self.sort_order = sort_order
 
     def __repr__(self):
