@@ -31,15 +31,9 @@ class Workouts(models.Base):
 
         self.name = name
 
-    def to_json(self):
-
-        """
-        Return Dictionary
-
-        Convert the object into a JSON representation.
-        """
-
-        return collections.OrderedDict([('name', self.name)])
+    def _to_json_helper(self):
+        return collections.OrderedDict([('id', str(self.workout_id)),
+                                        ('name', self.name)])
 
     def __repr__(self):
         repr_ = '{}(name="{}")'
