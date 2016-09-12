@@ -8,6 +8,7 @@ import sqlalchemy.orm
 from mfit_service import models
 from mfit_service import resources
 from mfit_service import services
+from mfit_service import views
 
 
 class Users(resources.Base):
@@ -60,7 +61,7 @@ class Users(resources.Base):
             'self': Users.get_self_link(user=user)
         }
 
-        body = user.to_json()
+        body = views.Users().dump(user).data
         body.update({'links': links})
 
         return body

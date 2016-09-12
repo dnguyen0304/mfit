@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import collections
-
 from sqlalchemy import Column
 from sqlalchemy.orm import relationship
 
@@ -37,13 +35,6 @@ class Users(models.Base):
         self.email_address = email_address
         self.first_name = first_name
         self.last_name = last_name
-
-    def _to_json_helper(self):
-
-        return collections.OrderedDict([('id', str(self.user_id)),
-                                        ('email_address', self.email_address),
-                                        ('first_name', self.first_name),
-                                        ('last_name', self.last_name)])
 
     def __repr__(self):
         repr_ = '{}(email_address="{}", first_name="{}", last_name="{}")'
