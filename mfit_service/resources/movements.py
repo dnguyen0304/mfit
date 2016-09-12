@@ -8,6 +8,7 @@ import sqlalchemy.orm
 from mfit_service import models
 from mfit_service import resources
 from mfit_service import services
+from mfit_service import views
 
 
 class Movements(resources.Base):
@@ -60,7 +61,7 @@ class Movements(resources.Base):
             'self': Movements.get_self_link(movement=movement)
         }
 
-        body = movement.to_json()
+        body = views.Movements().dump(movement).data
         body.update({'links': links})
 
         return body

@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import collections
-
 from sqlalchemy import Column
 from sqlalchemy.orm import relationship
 
@@ -30,10 +28,6 @@ class Movements(models.Base):
         """
 
         self.name = name
-
-    def _to_json_helper(self):
-        return collections.OrderedDict([('id', str(self.movement_id)),
-                                        ('name', self.name)])
 
     def __repr__(self):
         repr_ = '{}(name="{}")'
