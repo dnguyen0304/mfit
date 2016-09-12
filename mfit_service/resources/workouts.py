@@ -8,6 +8,7 @@ import sqlalchemy.orm
 from mfit_service import models
 from mfit_service import resources
 from mfit_service import services
+from mfit_service import views
 
 
 class Workouts(resources.Base):
@@ -60,7 +61,7 @@ class Workouts(resources.Base):
             'self': Workouts.get_self_link(workout=workout)
         }
 
-        body = workout.to_json()
+        body = views.Workouts().dump(workout).data
         body.update({'links': links})
 
         return body
