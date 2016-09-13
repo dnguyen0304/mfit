@@ -15,4 +15,5 @@ api.add_resource(resources.Workouts, '/v1/workouts/<int:workout_id>')
 api.add_resource(resources.WorkoutsCollection, '/v1/workouts/')
 api.add_resource(resources.Movements, '/v1/movements/<int:movement_id>')
 api.add_resource(resources.MovementsCollection, '/v1/movements/')
+api.add_resource(resources.WorkoutsMovements, '/v1/workouts/<int:workout_id>/movements/<int:movement_id>')
 
