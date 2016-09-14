@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import collections
-
 from sqlalchemy import Column
 from sqlalchemy.orm import relationship
 
@@ -30,16 +28,6 @@ class Workouts(models.Base):
         """
 
         self.name = name
-
-    def to_json(self):
-
-        """
-        Return Dictionary
-
-        Convert the object into a JSON representation.
-        """
-
-        return collections.OrderedDict([('name', self.name)])
 
     def __repr__(self):
         repr_ = '{}(name="{}")'

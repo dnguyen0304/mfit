@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import collections
-
 import flask
 import flask_restful
 import sqlalchemy
@@ -10,6 +8,7 @@ import sqlalchemy.orm
 from mfit_service import models
 from mfit_service import resources
 from mfit_service import services
+from mfit_service import views
 
 
 class Users(resources.Base):
@@ -62,13 +61,8 @@ class Users(resources.Base):
             'self': Users.get_self_link(user=user)
         }
 
-        data = {
-            'type': 'users',
-            'id': str(user.user_id),
-            'attributes': user.to_json()
-        }
-
-        body = collections.OrderedDict([('links', links), ('data', data)])
+        body = views.Users().dump(user).data
+        body.update({'links': links})
 
         return body
 

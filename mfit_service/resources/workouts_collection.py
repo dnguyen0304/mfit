@@ -16,13 +16,13 @@ class WorkoutsCollection(resources.Base):
             'self': services.api.url_for(WorkoutsCollection, _external=True)
         }
 
-        data = []
+        workouts = []
 
-        body = collections.OrderedDict([('links', links), ('data', data)])
+        body = collections.OrderedDict([('workouts', workouts), ('links', links)])
 
         for workout in self._db_context.query(models.Workouts).all():
             self_link = resources.Workouts.get_self_link(workout=workout)
-            data.append(self_link)
+            workouts.append(self_link)
 
         return body
 
