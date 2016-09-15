@@ -16,8 +16,8 @@ class Workouts(resources.Base):
     def get(self, workout_id):
         try:
             workout = self._db_context.query(models.Workouts) \
-                                       .filter_by(workout_id=workout_id) \
-                                       .one()
+                                      .filter_by(workout_id=workout_id) \
+                                      .one()
         except sqlalchemy.orm.exc.NoResultFound:
             return flask_restful.abort(404)
         else:
@@ -25,8 +25,8 @@ class Workouts(resources.Base):
 
     def patch(self, workout_id):
         workout = self._db_context.query(models.Workouts) \
-                                   .filter_by(workout_id=workout_id) \
-                                   .one()
+                                  .filter_by(workout_id=workout_id) \
+                                  .one()
 
         for attribute, value in flask.request.get_json().items():
             setattr(workout, attribute, value)
