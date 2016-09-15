@@ -19,10 +19,10 @@ class Workouts(views.Base):
 
     @marshmallow.pre_dump
     def preprocess_relationships(self, entity):
-        movements_uri = services.api.url_for(
-            resources.WorkoutsMovementsRelationships,
+        programs_uri = services.api.url_for(
+            resources.WorkoutsProgramsRelationship,
             workout_id=entity.workout_id,
             _external=True)
         entity.relationships = collections.OrderedDict()
-        entity.relationships['movements_uri'] = movements_uri
+        entity.relationships['programs_uri'] = programs_uri
         return entity
