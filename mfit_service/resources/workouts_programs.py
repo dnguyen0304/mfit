@@ -11,61 +11,61 @@ from mfit_service import services
 from mfit_service import views
 
 
-class WorkoutsMovements(resources.Base):
+class WorkoutsPrograms(resources.Base):
 
-    def get(self, workout_id, workout_movement_id):
+    def get(self, workout_id, workout_program_id):
         try:
-            workout_movement = (
+            workout_program = (
                 self._db_context.query(models.WorkoutsMovements)
-                                .filter_by(workout_movement_id=workout_movement_id)
+                                .filter_by(workout_movement_id=workout_program_id)
                                 .one())
         except sqlalchemy.orm.exc.NoResultFound:
             return flask_restful.abort(404)
         else:
-            return WorkoutsMovements.to_json(workout_movement=workout_movement)
+            return WorkoutsPrograms.to_json(workout_program=workout_program)
 
-    def patch(self, workout_id, workout_movement_id):
-        workout_movement = (
+    def patch(self, workout_id, workout_program_id):
+        workout_program = (
             self._db_context.query(models.WorkoutsMovements)
-                            .filter_by(workout_movement_id=workout_movement_id)
+                            .filter_by(workout_movement_id=workout_program_id)
                             .one())
 
         for attribute, value in flask.request.get_json().items():
-            setattr(workout_movement, attribute, value)
+            setattr(workout_program, attribute, value)
 
         # TODO (duyn): ME-192
-        self._db_context.add(workout_movement, updated_by=999)
+        self._db_context.add(workout_program, updated_by=999)
         self._db_context.commit()
 
-        body = WorkoutsMovements.to_json(workout_movement=workout_movement)
+        body = WorkoutsPrograms.to_json(workout_program=workout_program)
 
         self._db_context.close()
 
         return body
 
-    def delete(self, workout_id, workout_movement_id):
+    def delete(self, workout_id, workout_program_id):
         self._db_context.query(models.WorkoutsMovements) \
-                        .filter_by(workout_movement_id=workout_movement_id) \
+                        .filter_by(workout_movement_id=workout_program_id) \
                         .delete(synchronize_session=False)
         self._db_context.commit()
         self._db_context.close()
 
     @staticmethod
-    def get_self_link(workout_movement):
+    def get_self_link(workout_program):
         self_link = services.api.url_for(
-            WorkoutsMovements,
-            workout_id=workout_movement.workout_id,
-            workout_movement_id=workout_movement.workout_movement_id,
+            WorkoutsPrograms,
+            workout_id=workout_program.workout_id,
+            workout_program_id=workout_program.workout_movement_id,
             _external=True)
         return self_link
 
     @staticmethod
-    def to_json(workout_movement):
+    def to_json(workout_program):
         links = {
-            'self': WorkoutsMovements.get_self_link(workout_movement=workout_movement)
+            'self': WorkoutsPrograms.get_self_link(workout_program=workout_program)
         }
 
-        body = views.WorkoutsMovements().dump(workout_movement).data
+        body = views.WorkoutsPrograms().dump(workout_program).data
         body.update({'links': links})
 
         return body

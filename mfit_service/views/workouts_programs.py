@@ -9,19 +9,19 @@ from mfit_service import resources
 from mfit_service import views
 
 
-class WorkoutsMovements(views.Base):
+class WorkoutsPrograms(views.Base):
 
     id = fields.Integer(attribute='workout_movement_id')
     sets = fields.Integer()
     value = fields.Integer()
-    unit = fields.String(attribute='workout_movement_unit_name')
+    unit = fields.String(attribute='workout_program_unit_name')
     sort_order = fields.Integer()
 
     relationships = fields.Dict()
 
     @marshmallow.pre_dump
-    def preprocess_workout_movement_unit(self, entity):
-        entity.workout_movement_unit_name = entity.workout_movement_unit.name
+    def preprocess_workout_program_unit(self, entity):
+        entity.workout_program_unit_name = entity.workout_movement_unit.name
         return entity
 
     @marshmallow.pre_dump
