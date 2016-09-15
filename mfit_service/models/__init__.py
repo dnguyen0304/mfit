@@ -10,11 +10,11 @@ from mfit_service.models.workouts_movements import WorkoutsMovements
 from mfit_service.models.users_workouts_movements import UsersWorkoutsMovements
 
 __all__ = ['Base',
-           'Users',
-           'Workouts',
            'Movements',
-           'WorkoutsMovementsUnits',
+           'Users',
            'UsersWorkouts',
+           'UsersWorkoutsMovements',
+           'Workouts',
            'WorkoutsMovements',
-           'UsersWorkoutsMovements']
+           'WorkoutsMovementsUnits']
 

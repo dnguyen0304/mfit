@@ -12,13 +12,13 @@ from mfit_service.resources.workouts_programs import WorkoutsPrograms
 from mfit_service.resources.workouts_programs_relationship import WorkoutsProgramsRelationship
 
 __all__ = ['Base',
+           'Movements',
+           'MovementsCollection',
            'Root',
            'Users',
            'UsersCollection',
            'Workouts',
            'WorkoutsCollection',
            'WorkoutsPrograms',
-           'WorkoutsProgramsRelationship',
-           'Movements',
-           'MovementsCollection']
+           'WorkoutsProgramsRelationship']
 

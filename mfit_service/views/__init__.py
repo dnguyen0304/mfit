@@ -8,9 +8,9 @@ from mfit_service.views.workouts_programs_units import WorkoutsProgramsUnits
 from mfit_service.views.workouts_programs import WorkoutsPrograms
 
 __all__ = ['Base',
+           'Movements',
            'Users',
            'Workouts',
            'WorkoutsPrograms',
-           'WorkoutsProgramsUnits',
-           'Movements']
+           'WorkoutsProgramsUnits']
 
