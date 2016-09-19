@@ -16,13 +16,12 @@ class UsersCollection(resources.Base):
             'self': services.api.url_for(UsersCollection, _external=True)
         }
 
-        users = []
+        users_uris = [resources.Users.get_self_link(user=user)
+                      for user
+                      in self._db_context.query(models.Users).all()]
 
-        body = collections.OrderedDict([('users', users), ('links', links)])
-
-        for user in self._db_context.query(models.Users).all():
-            self_link = resources.Users.get_self_link(user=user)
-            users.append(self_link)
+        body = collections.OrderedDict([('users_uris', users_uris),
+                                        ('links', links)])
 
         return body
 

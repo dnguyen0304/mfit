@@ -18,17 +18,17 @@ class WorkoutsProgramsRelationship(resources.Base):
                                          _external=True)
         }
 
-        workout_program_uris = []
-        body = collections.OrderedDict([('programs', workout_program_uris),
-                                        ('links', links)])
-        workout_programs = self._db_context.query(models.WorkoutsMovements) \
-                                           .filter_by(workout_id=workout_id) \
-                                           .all()
+        workouts_programs = self._db_context.query(models.WorkoutsMovements) \
+                                            .filter_by(workout_id=workout_id) \
+                                            .all()
 
-        for workout_program in workout_programs:
-            self_link = resources.WorkoutsPrograms.get_self_link(
-                workout_program=workout_program)
-            workout_program_uris.append(self_link)
+        workouts_programs_uris = [
+            resources.WorkoutsPrograms.get_self_link(workout_program=workout_program)
+            for workout_program
+            in workouts_programs]
+
+        body = collections.OrderedDict([('programs_uris', workouts_programs_uris),
+                                        ('links', links)])
 
         return body
 
