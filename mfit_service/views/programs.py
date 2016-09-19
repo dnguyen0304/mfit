@@ -9,19 +9,19 @@ from mfit_service import resources
 from mfit_service import views
 
 
-class WorkoutsPrograms(views.Base):
+class Programs(views.Base):
 
     id = fields.Integer(attribute='workout_movement_id')
     sets = fields.Integer()
     value = fields.Integer()
-    unit = fields.String(attribute='workout_program_unit_name')
+    unit = fields.String(attribute='unit_name')
     sort_order = fields.Integer()
 
     relationships = fields.Dict()
 
     @marshmallow.pre_dump
-    def preprocess_workout_program_unit(self, entity):
-        entity.workout_program_unit_name = entity.workout_movement_unit.name
+    def preprocess_unit(self, entity):
+        entity.unit_name = entity.workout_movement_unit.name
         return entity
 
     @marshmallow.pre_dump
@@ -29,5 +29,7 @@ class WorkoutsPrograms(views.Base):
         entity.relationships = collections.OrderedDict()
         entity.relationships['movements_uri'] = resources.Movements.get_self_link(
             movement=entity.movement)
+        entity.relationships['workouts_uri'] = resources.Workouts.get_self_link(
+            workout=entity.workout)
         return entity
 
