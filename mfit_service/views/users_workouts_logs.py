@@ -19,7 +19,7 @@ class UsersWorkoutsLogs(views.Base):
     @marshmallow.pre_dump
     def preprocess_relationships(self, entity):
         entity.relationships = collections.OrderedDict()
-        entity.relationships['workouts_uri'] = resources.UsersWorkouts.get_self_link(
+        entity.relationships['workouts_uri'] = resources.Registrations.get_self_link(
             user_workout=entity.user_workout)
         entity.relationships['movements_uri'] = resources.Movements.get_self_link(
             movement=entity.movement)

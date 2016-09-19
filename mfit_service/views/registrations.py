@@ -9,7 +9,7 @@ from mfit_service import resources
 from mfit_service import views
 
 
-class UsersWorkouts(views.Base):
+class Registrations(views.Base):
 
     id = fields.Integer(attribute='user_workout_id')
     started_on = fields.DateTime()
@@ -23,6 +23,8 @@ class UsersWorkouts(views.Base):
         entity.relationships['logs_uri'] = resources.UsersWorkoutsLogsCollection.get_self_link(
             user_id=entity.user.user_id,
             user_workout_id=entity.user_workout_id)
+        entity.relationships['users_uri'] = resources.Users.get_self_link(
+            user=entity.user)
         entity.relationships['workouts_uri'] = resources.Workouts.get_self_link(
             workout=entity.workout)
         return entity

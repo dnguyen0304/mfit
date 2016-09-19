@@ -10,8 +10,8 @@ from mfit_service.resources.movements import Movements
 from mfit_service.resources.movements_collection import MovementsCollection
 from mfit_service.resources.programs import Programs
 from mfit_service.resources.programs_collection import ProgramsCollection
-from mfit_service.resources.users_workouts import UsersWorkouts
-from mfit_service.resources.users_workouts_relationship import UsersWorkoutsRelationship
+from mfit_service.resources.registrations import Registrations
+from mfit_service.resources.registrations_collection import RegistrationsCollection
 from mfit_service.resources.users_workouts_logs import UsersWorkoutsLogs
 from mfit_service.resources.users_workouts_logs_collection import UsersWorkoutsLogsCollection
 
@@ -20,13 +20,13 @@ __all__ = ['Base',
            'MovementsCollection',
            'Programs',
            'ProgramsCollection',
+           'Registrations',
+           'RegistrationsCollection',
            'Root',
            'Users',
            'UsersCollection',
-           'UsersWorkouts',
            'UsersWorkoutsLogs',
            'UsersWorkoutsLogsCollection',
-           'UsersWorkoutsRelationship',
            'Workouts',
            'WorkoutsCollection']
 

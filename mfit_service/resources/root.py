@@ -16,6 +16,7 @@ class Root(resources.Base):
         relationships = {
             'movements_uri': services.api.url_for(resources.MovementsCollection, _external=True),
             'programs_uri': services.api.url_for(resources.ProgramsCollection, _external=True),
+            'registrations_uri': services.api.url_for(resources.RegistrationsCollection, _external=True),
             'workouts_uri': services.api.url_for(resources.WorkoutsCollection, _external=True),
             'users_uri': services.api.url_for(resources.UsersCollection, _external=True)}
 
