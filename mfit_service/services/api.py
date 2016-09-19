@@ -19,6 +19,6 @@ api.add_resource(resources.Programs, '/v1/programs/<int:program_id>')
 api.add_resource(resources.ProgramsCollection, '/v1/programs/')
 api.add_resource(resources.Registrations, '/v1/registrations/<int:registration_id>')
 api.add_resource(resources.RegistrationsCollection, '/v1/registrations/')
-api.add_resource(resources.UsersWorkoutsLogs, '/v1/users/<int:user_id>/workouts/<int:user_workout_id>/logs/<int:user_workout_log_id>')
-api.add_resource(resources.UsersWorkoutsLogsCollection, '/v1/users/<int:user_id>/workouts/<int:user_workout_id>/logs/')
+api.add_resource(resources.RegistrationsLogs, '/v1/registrations/<int:registration_id>/logs/<int:registration_log_id>')
+api.add_resource(resources.RegistrationsLogsCollection, '/v1/registrations/<int:registration_id>/logs/')
 
