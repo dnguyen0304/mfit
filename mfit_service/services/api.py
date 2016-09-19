@@ -19,4 +19,6 @@ api.add_resource(resources.UsersWorkouts, '/v1/users/<int:user_id>/workouts/<int
 api.add_resource(resources.UsersWorkoutsRelationship, '/v1/users/<int:user_id>/workouts/')
 api.add_resource(resources.WorkoutsPrograms, '/v1/workouts/<int:workout_id>/programs/<int:workout_program_id>')
 api.add_resource(resources.WorkoutsProgramsRelationship, '/v1/workouts/<int:workout_id>/programs/')
+api.add_resource(resources.UsersWorkoutsLogs, '/v1/users/<int:user_id>/workouts/<int:user_workout_id>/logs/<int:user_workout_log_id>')
+api.add_resource(resources.UsersWorkoutsLogsCollection, '/v1/users/<int:user_id>/workouts/<int:user_workout_id>/logs/')
 
