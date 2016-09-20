@@ -1,6 +1,4 @@
-CREATE OR REPLACE FUNCTION pg_temp.addDailyLogs()
-RETURNS smallint AS
-$$
+DO $$
 DECLARE
 	countBefore integer;
 	countAfter integer;
@@ -34,7 +32,6 @@ BEGIN
 		FROM users_workouts_movements
 	);
 
-	RETURN countAfter - countBefore;
-END
-$$
+	RAISE INFO '% record(s) were inserted SUCCESSFULLY.', countAfter - countBefore;
+END $$
 LANGUAGE plpgsql;
