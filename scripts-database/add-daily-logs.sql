@@ -1,6 +1,4 @@
-CREATE OR REPLACE FUNCTION pg_temp.addDailyLogs(
-	userEmailAddress varchar(64)
-)
+CREATE OR REPLACE FUNCTION pg_temp.addDailyLogs()
 RETURNS smallint AS
 $$
 DECLARE
@@ -23,15 +21,12 @@ BEGIN
 		SELECT
 			users_workouts.user_workout_id,
 			workouts_movements.movement_id,
-			workouts_movements.sets AS sets_remaining,
-			date_part('day', age(users_workouts.ends_on, CURRENT_TIMESTAMP)) AS days_remaining,
-			users.user_id AS created_by
+			workouts_movements.sets,
+			date_part('day', age(users_workouts.ends_on, CURRENT_TIMESTAMP)),
+			-1
 		FROM users_workouts
 		INNER JOIN workouts_movements ON workouts_movements.workout_id = users_workouts.workout_id
-		INNER JOIN users ON users.user_id = users_workouts.user_id
-		WHERE
-			users_workouts.ends_on > CURRENT_TIMESTAMP AND
-			users.email_address = userEmailAddress
+		WHERE users_workouts.ends_on > CURRENT_TIMESTAMP
 	);
 
 	countAfter := (
