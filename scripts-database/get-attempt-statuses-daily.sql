@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION pg_temp.getAttemptStatuses(
+CREATE OR REPLACE FUNCTION pg_temp.getAttemptStatusesDaily (
 	userEmailAddress varchar(64)
 )
 RETURNS TABLE (
