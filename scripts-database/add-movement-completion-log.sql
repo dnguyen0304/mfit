@@ -1,12 +1,10 @@
-DO $$
-
-DECLARE
-	userEmailAddress varchar(64);
-	movementName varchar(32);
+CREATE OR REPLACE FUNCTION pg_temp.addMovementCompletion (
+	userEmailAddress varchar(64),
+	movementName varchar(32)
+)
+RETURNS void AS
+$$
 BEGIN
-	userEmailAddress := '';
-	movementName := '';
-
 	INSERT INTO users_workouts_movements (
 		user_workout_id,
 		movement_id,
@@ -47,5 +45,6 @@ BEGIN
 			users_workouts.ends_on > CURRENT_TIMESTAMP AND
 			users.email_address = userEmailAddress
 	);
-
-END $$;
+END
+$$
+LANGUAGE plpgsql;
