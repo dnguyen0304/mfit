@@ -1,9 +1,16 @@
-DO $$
-
+CREATE OR REPLACE FUNCTION pg_temp.addDailyLogs(
+	userEmailAddress varchar(64)
+)
+RETURNS smallint AS
+$$
 DECLARE
-	userEmailAddress varchar(64);
+	countBefore integer;
+	countAfter integer;
 BEGIN
-	userEmailAddress := '';
+	countBefore := (
+		SELECT COUNT(*)
+		FROM users_workouts_movements
+	);
 
 	INSERT INTO users_workouts_movements (
 		user_workout_id,
@@ -27,4 +34,12 @@ BEGIN
 			users.email_address = userEmailAddress
 	);
 
-END $$;
+	countAfter := (
+		SELECT COUNT(*)
+		FROM users_workouts_movements
+	);
+
+	RETURN countAfter - countBefore;
+END
+$$
+LANGUAGE plpgsql;
