@@ -27,12 +27,12 @@ BEGIN
 		GROUP BY users_workouts_movements.movement_id
 	)
 	SELECT
-		workouts.name AS workout_name,
-		movements.name AS movement_name,
+		workouts.name,
+		movements.name,
 		users_workouts_movements.sets_remaining,
 		workouts_movements.value,
-		workouts_movements_units.name AS unit,
-		date_part('day', age(users_workouts.ends_on, CURRENT_TIMESTAMP)) AS days_remaining
+		workouts_movements_units.name,
+		date_part('day', age(users_workouts.ends_on, CURRENT_TIMESTAMP))
 	FROM users_workouts_movements
 	INNER JOIN cte ON
 		cte.movement_id = users_workouts_movements.movement_id AND
