@@ -1,10 +1,9 @@
--- Log a movement set
 INSERT INTO users_workouts_movements (
-    user_workout_id,
-    movement_id,
-    sets_remaining,
-    days_remaining,
-    created_by
+	user_workout_id,
+	movement_id,
+	sets_remaining,
+	days_remaining,
+	created_by
 )
 (
 	WITH cte AS (
@@ -23,13 +22,13 @@ INSERT INTO users_workouts_movements (
 			movements.name = ''
 		GROUP BY users_workouts_movements.movement_id
 	)
-    SELECT
-        users_workouts_movements.user_workout_id,
-        users_workouts_movements.movement_id,
-        users_workouts_movements.sets_remaining - 1 AS sets_remaining,
+	SELECT
+		users_workouts_movements.user_workout_id,
+		users_workouts_movements.movement_id,
+		users_workouts_movements.sets_remaining - 1 AS sets_remaining,
 		date_part('day', age(users_workouts.ends_on, CURRENT_TIMESTAMP)) AS days_remaining,
 		users.user_id AS created_by
-    FROM users_workouts_movements
+	FROM users_workouts_movements
 	INNER JOIN cte ON
 		cte.movement_id = users_workouts_movements.movement_id AND
 		cte.created_on = users_workouts_movements.created_on
