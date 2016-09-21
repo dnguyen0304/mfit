@@ -26,7 +26,7 @@ BEGIN
 				users_workouts.ends_on > CURRENT_TIMESTAMP AND
 				users.email_address = userEmailAddress AND
 				movements.name = movementName AND
-				users_workouts_movements.created_on > CURRENT_DATE
+				users_workouts_movements.created_on >= CURRENT_DATE
 			GROUP BY users_workouts_movements.movement_id
 		)
 		SELECT
