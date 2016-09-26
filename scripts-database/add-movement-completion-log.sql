@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION pg_temp.addMovementCompletion (
+CREATE OR REPLACE FUNCTION pg_temp.addMovementCompletionLog (
 	userEmailAddress varchar(64),
 	movementName varchar(32)
 )
