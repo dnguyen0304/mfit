@@ -14,7 +14,7 @@ BEGIN
 	(
 		WITH last_logs_today AS (
 			SELECT
-				MAX(attempts_logs.created_on) AS created_on,
+				MAX(attempts_logs.created_at) AS created_at,
 				attempts_logs.habits_id
 			FROM attempts_logs
 			INNER JOIN attempts ON attempts.id = attempts_logs.attempts_id
@@ -25,7 +25,7 @@ BEGIN
 				attempts.ends_at > CURRENT_TIMESTAMP AND
 				users.email_address = usersEmailAddress AND
 				habits.name = habitsName AND
-				attempts_logs.created_on >= CURRENT_DATE
+				attempts_logs.created_at >= CURRENT_DATE
 			GROUP BY attempts_logs.habits_id
 		)
 		SELECT
@@ -35,7 +35,7 @@ BEGIN
 			attempts.users_id AS created_by
 		FROM attempts_logs
 		INNER JOIN last_logs_today ON
-			last_logs_today.created_on = attempts_logs.created_on AND
+			last_logs_today.created_at = attempts_logs.created_at AND
 			last_logs_today.habits_id = attempts_logs.habits_id
 		INNER JOIN attempts ON attempts.id = attempts_logs.attempts_id
 		INNER JOIN users ON users.id = attempts.users_id

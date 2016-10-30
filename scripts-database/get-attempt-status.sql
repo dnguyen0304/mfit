@@ -12,7 +12,7 @@ BEGIN
 	RETURN QUERY
 	WITH last_logs_by_day AS (
 		SELECT
-			MAX(attempts_logs.created_on) AS created_on,
+			MAX(attempts_logs.created_at) AS created_at,
 			attempts_logs.habits_id
 		FROM attempts_logs
 		INNER JOIN attempts ON attempts.id = attempts_logs.attempts_id
@@ -22,23 +22,23 @@ BEGIN
 			attempts.ends_at > CURRENT_TIMESTAMP AND
 			users.email_address = usersEmailAddress
 		GROUP BY
-			CAST(attempts_logs.created_on AS date),
+			CAST(attempts_logs.created_at AS date),
 			attempts_logs.habits_id
 	)
 		SELECT
-			CAST(attempts_logs.created_on AS date),
+			CAST(attempts_logs.created_at AS date),
 			habits.name,
 			routines.sets - attempts_logs.sets_remaining,
 			attempts_logs.sets_remaining
 		FROM attempts_logs
 		INNER JOIN last_logs_by_day ON
-			last_logs_by_day.created_on = attempts_logs.created_on AND
+			last_logs_by_day.created_at = attempts_logs.created_at AND
 			last_logs_by_day.habits_id = attempts_logs.habits_id
 		INNER JOIN attempts ON attempts.id = attempts_logs.attempts_id
 		INNER JOIN routines ON routines.habits_id = attempts_logs.habits_id
 		INNER JOIN habits ON habits.id = attempts_logs.habits_id
 		ORDER BY
-			CAST(attempts_logs.created_on AS date),
+			CAST(attempts_logs.created_at AS date),
 			routines.sort_order ASC;
 END
 $$
