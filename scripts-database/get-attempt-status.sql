@@ -1,49 +1,45 @@
-CREATE OR REPLACE FUNCTION pg_temp.getAttemptStatusesWeekly (
-	userEmailAddress varchar(64)
+CREATE OR REPLACE FUNCTION pg_temp.getAttemptStatus (
+	usersEmailAddress varchar(64)
 )
 RETURNS TABLE (
-	workout			varchar(32),
 	"date"			date,
-	movement		varchar(32),
+	habits_name		varchar(32),
 	sets_completed	smallint,
 	sets_missed		smallint
 ) AS
 $$
 BEGIN
-RETURN QUERY
-WITH last_logs_by_day AS (
-	SELECT
-		MAX(users_workouts_movements.created_on) AS created_on,
-		users_workouts_movements.movement_id
-	FROM users_workouts_movements
-	INNER JOIN users_workouts ON users_workouts.user_workout_id = users_workouts_movements.user_workout_id
-	INNER JOIN users ON users.user_id = users_workouts.user_id
-	WHERE
-		users_workouts.ends_on > CURRENT_TIMESTAMP AND
-		users.email_address = userEmailAddress
-	GROUP BY
-		CAST(users_workouts_movements.created_on AS date),
-		users_workouts_movements.movement_id
-)
-	SELECT
-		workouts.name,
-		CAST(users_workouts_movements.created_on AS date),
-		movements.name,
-		workouts_movements.sets - users_workouts_movements.sets_remaining,
-		users_workouts_movements.sets_remaining
-	FROM users_workouts_movements
-	INNER JOIN last_logs_by_day ON
-		last_logs_by_day.created_on = users_workouts_movements.created_on AND
-		last_logs_by_day.movement_id = users_workouts_movements.movement_id
-	INNER JOIN users_workouts ON users_workouts.user_workout_id = users_workouts_movements.user_workout_id
-	INNER JOIN workouts_movements ON
-		workouts_movements.workout_id = users_workouts.workout_id AND
-		workouts_movements.movement_id = users_workouts_movements.movement_id
-	INNER JOIN workouts ON workouts.workout_id = users_workouts.workout_id
-	INNER JOIN movements ON movements.movement_id = users_workouts_movements.movement_id
-	ORDER BY
-		CAST(users_workouts_movements.created_on AS date),
-		workouts_movements.sort_order ASC;
+	RETURN QUERY
+	WITH last_logs_by_day AS (
+		SELECT
+			MAX(attempts_logs.created_on) AS created_on,
+			attempts_logs.habits_id
+		FROM attempts_logs
+		INNER JOIN attempts ON attempts.id = attempts_logs.attempts_id
+		INNER JOIN users ON users.id = attempts.users_id
+		WHERE
+			attempts.starts_at <= CURRENT_TIMESTAMP AND
+			attempts.ends_at > CURRENT_TIMESTAMP AND
+			users.email_address = usersEmailAddress
+		GROUP BY
+			CAST(attempts_logs.created_on AS date),
+			attempts_logs.habits_id
+	)
+		SELECT
+			CAST(attempts_logs.created_on AS date),
+			habits.name,
+			routines.sets - attempts_logs.sets_remaining,
+			attempts_logs.sets_remaining
+		FROM attempts_logs
+		INNER JOIN last_logs_by_day ON
+			last_logs_by_day.created_on = attempts_logs.created_on AND
+			last_logs_by_day.habits_id = attempts_logs.habits_id
+		INNER JOIN attempts ON attempts.id = attempts_logs.attempts_id
+		INNER JOIN routines ON routines.habits_id = attempts_logs.habits_id
+		INNER JOIN habits ON habits.id = attempts_logs.habits_id
+		ORDER BY
+			CAST(attempts_logs.created_on AS date),
+			routines.sort_order ASC;
 END
 $$
 LANGUAGE plpgsql;
