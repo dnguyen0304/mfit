@@ -1,5 +1,5 @@
 CREATE OR REPLACE FUNCTION pg_temp.getActiveRoutine (
-	userEmailAddress varchar(64)
+	usersEmailAddress varchar(64)
 )
 RETURNS TABLE (
 	habits_name	varchar(32),
