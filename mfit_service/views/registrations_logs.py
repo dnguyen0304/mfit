@@ -21,7 +21,7 @@ class RegistrationsLogs(views.Base):
         entity.relationships = collections.OrderedDict()
         entity.relationships['movements_uri'] = resources.Movements.get_self_link(
             movement=entity.movement)
-        entity.relationships['workouts_uri'] = resources.Registrations.get_self_link(
+        entity.relationships['registrations_uri'] = resources.Registrations.get_self_link(
             registration=entity.user_workout)
         return entity
 
