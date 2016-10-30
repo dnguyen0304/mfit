@@ -4,6 +4,10 @@ This document adheres to the specifications outlined in [RFC 2119](https://www.i
 
 Database
 --------
+### Configuration
+- The OS timezone **may** be "UTC".
+- The database timezone **must** be "UTC".
+
 ### Naming Convention
 - In general, lowercase_delimited_by_underscores **should** be used.
 - Tables **must** be named with the plural form of their entity.
@@ -73,3 +77,4 @@ CREATE TABLE users (
 ```
 - Column constraints **should** trend towards being restrictive.
 - Data type constraints **should** trend towards being more relaxed.
+- Datetime (data types that store both date and time) columns **must** include the time zone.
