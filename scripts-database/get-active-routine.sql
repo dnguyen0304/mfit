@@ -1,5 +1,5 @@
 CREATE OR REPLACE FUNCTION pg_temp.getActiveRoutine (
-	userEmailAddress varchar(64)
+	usersEmailAddress varchar(64)
 )
 RETURNS TABLE (
 	habits_name	varchar(32),
@@ -21,7 +21,7 @@ BEGIN
 	INNER JOIN attempts ON attempts.habits_groups_id = routines.habits_groups_id
 	INNER JOIN users ON users.id = attempts.users_id
 	WHERE
-		users.email_address = userEmailAddress AND
+		users.email_address = usersEmailAddress AND
 		attempts.starts_at <= CURRENT_TIMESTAMP AND
 		attempts.ends_at > CURRENT_TIMESTAMP
 	ORDER BY routines.sort_order ASC;
