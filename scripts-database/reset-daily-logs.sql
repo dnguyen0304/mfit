@@ -21,7 +21,7 @@ BEGIN
 			routines.sets,
 			-1
 		FROM attempts
-		INNER JOIN routines ON routines.habits_groups_id = attempts.habits_groups_id
+		INNER JOIN routines ON routines.habit_groups_id = attempts.habit_groups_id
 		WHERE
 			attempts.starts_at <= CURRENT_TIMESTAMP AND
 			attempts.ends_at > CURRENT_TIMESTAMP

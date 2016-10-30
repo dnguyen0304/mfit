@@ -18,7 +18,7 @@ BEGIN
 	FROM routines
 	INNER JOIN habits ON habits.id = routines.habits_id
 	INNER JOIN routines_units ON routines_units.id = routines.routines_units_id
-	INNER JOIN attempts ON attempts.habits_groups_id = routines.habits_groups_id
+	INNER JOIN attempts ON attempts.habit_groups_id = routines.habit_groups_id
 	INNER JOIN users ON users.id = attempts.users_id
 	WHERE
 		users.email_address = usersEmailAddress AND
