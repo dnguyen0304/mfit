@@ -5,31 +5,31 @@ DECLARE
 BEGIN
 	countBefore := (
 		SELECT COUNT(*)
-		FROM users_workouts_movements
+		FROM attempts_logs
 	);
 
-	INSERT INTO users_workouts_movements (
-		user_workout_id,
-		movement_id,
+	INSERT INTO attempts_logs (
+		attempts_id,
+		habits_id,
 		sets_remaining,
-		days_remaining,
 		created_by
 	)
 	(
 		SELECT
-			users_workouts.user_workout_id,
-			workouts_movements.movement_id,
-			workouts_movements.sets,
-			date_part('day', age(users_workouts.ends_on, CURRENT_TIMESTAMP)),
+			attempts.id,
+			routines.habits_id,
+			routines.sets,
 			-1
-		FROM users_workouts
-		INNER JOIN workouts_movements ON workouts_movements.workout_id = users_workouts.workout_id
-		WHERE users_workouts.ends_on > CURRENT_TIMESTAMP
+		FROM attempts
+		INNER JOIN routines ON routines.habits_groups_id = attempts.habits_groups_id
+		WHERE
+			attempts.starts_at <= CURRENT_TIMESTAMP AND
+			attempts.ends_at > CURRENT_TIMESTAMP
 	);
 
 	countAfter := (
 		SELECT COUNT(*)
-		FROM users_workouts_movements
+		FROM attempts_logs
 	);
 
 	RAISE INFO '% record(s) were inserted SUCCESSFULLY.', countAfter - countBefore;
