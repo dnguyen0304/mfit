@@ -4,7 +4,11 @@ CREATE OR REPLACE FUNCTION pg_temp.addHabitCompletionLog (
 )
 RETURNS void AS
 $$
+DECLARE
+	current_datetime	timestamp with time zone;
 BEGIN
+	current_datetime := CURRENT_TIMESTAMP AT TIME ZONE 'localtime';
+
 	INSERT INTO attempts_logs (
 		attempts_id,
 		habits_id,
@@ -21,11 +25,11 @@ BEGIN
 			INNER JOIN users ON users.id = attempts.users_id
 			INNER JOIN habits ON habits.id = attempts_logs.habits_id
 			WHERE
-				attempts.starts_at <= CURRENT_TIMESTAMP AND
-				attempts.ends_at > CURRENT_TIMESTAMP AND
+				attempts.starts_at <= current_datetime AND
+				attempts.ends_at > current_datetime AND
 				users.email_address = usersEmailAddress AND
 				habits.name = habitsName AND
-				attempts_logs.created_at >= CURRENT_DATE
+				attempts_logs.created_at >= CAST(current_datetime AS date)
 			GROUP BY attempts_logs.habits_id
 		)
 		SELECT
@@ -40,8 +44,8 @@ BEGIN
 		INNER JOIN attempts ON attempts.id = attempts_logs.attempts_id
 		INNER JOIN users ON users.id = attempts.users_id
 		WHERE
-			attempts.starts_at <= CURRENT_TIMESTAMP AND
-			attempts.ends_at > CURRENT_TIMESTAMP AND
+			attempts.starts_at <= current_datetime AND
+			attempts.ends_at > current_datetime AND
 			users.email_address = usersEmailAddress
 	);
 END
