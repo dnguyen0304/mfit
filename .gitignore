@@ -101,5 +101,5 @@ ENV/
 # Rope project settings
 .ropeproject
 
-# PyCharm
+# IntelliJ IDEA / PyCharm
 .idea/
