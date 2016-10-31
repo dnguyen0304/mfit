@@ -41,6 +41,18 @@ CREATE TABLE siblings_a_siblings_b (
     siblings_b_id   int     NOT NULL    REFERENCES siblings_b (id),
 );
 ```
+- Hungarian notation **must not** be used.
+```
+-- YES
+CREATE TABLE foo (
+    created_at      timestamp   NOT NULL    DEFAULT CURRENT_TIMESTAMP
+);
+
+-- No
+CREATE TABLE foo (
+    created_date    timestamp   NOT NULL    DEFAULT CURRENT_TIMESTAMP
+);
+```
 
 ### Creating New Tables
 - Tables **must** have a primary key.
