@@ -8,7 +8,11 @@ RETURNS TABLE (
 	unit		varchar(16)
 ) AS
 $$
+DECLARE
+	currentDatetime	timestamp with time zone;
 BEGIN
+	currentDatetime := CURRENT_TIMESTAMP AT TIME ZONE 'localtime';
+
 	RETURN QUERY
 	SELECT
 		habits.name,
@@ -22,8 +26,8 @@ BEGIN
 	INNER JOIN users ON users.id = attempts.users_id
 	WHERE
 		users.email_address = usersEmailAddress AND
-		attempts.starts_at <= CURRENT_TIMESTAMP AND
-		attempts.ends_at > CURRENT_TIMESTAMP
+		attempts.starts_at <= currentDatetime AND
+		attempts.ends_at > currentDatetime
 	ORDER BY routines.sort_order ASC;
 END
 $$
