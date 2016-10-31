@@ -45,12 +45,12 @@ CREATE TABLE siblings_a_siblings_b (
 ```
 -- YES
 CREATE TABLE foo (
-    created_at      timestamp   NOT NULL    DEFAULT CURRENT_TIMESTAMP
+    created_at      timestamp with time zone    NOT NULL    DEFAULT CURRENT_TIMESTAMP
 );
 
 -- No
 CREATE TABLE foo (
-    created_date    timestamp   NOT NULL    DEFAULT CURRENT_TIMESTAMP
+    created_date    timestamp with time zone    NOT NULL    DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
@@ -73,11 +73,11 @@ CREATE TABLE users (
 ```
 -- YES
 CREATE TABLE users (
-    id              serial                  PRIMARY KEY,
-    email_address   varchar(64) NOT NULL    UNIQUE
-    created_at      timestamp   NOT NULL    DEFAULT CURRENT_TIMESTAMP,
-    created_by      int         NOT NULL,
-    updated_at      timestamp,
+    id              serial                                  PRIMARY KEY,
+    email_address   varchar(64)                 NOT NULL    UNIQUE
+    created_at      timestamp with time zone    NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    created_by      int                         NOT NULL,
+    updated_at      timestamp with time zone,
     updated_by      int
 );
 
