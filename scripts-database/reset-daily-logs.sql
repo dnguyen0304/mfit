@@ -2,7 +2,10 @@ DO $$
 DECLARE
 	countBefore integer;
 	countAfter integer;
+	currentDatetime	timestamp with time zone;
 BEGIN
+	currentDatetime := CURRENT_TIMESTAMP AT TIME ZONE 'localtime';
+
 	countBefore := (
 		SELECT COUNT(*)
 		FROM attempts_logs
@@ -23,8 +26,8 @@ BEGIN
 		FROM attempts
 		INNER JOIN routines ON routines.habit_groups_id = attempts.habit_groups_id
 		WHERE
-			attempts.starts_at <= CURRENT_TIMESTAMP AND
-			attempts.ends_at > CURRENT_TIMESTAMP
+			attempts.starts_at <= currentDatetime AND
+			attempts.ends_at > currentDatetime
 	);
 
 	countAfter := (
