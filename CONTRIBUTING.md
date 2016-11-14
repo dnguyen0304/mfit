@@ -41,6 +41,23 @@ CREATE TABLE siblings_a_siblings_b (
     siblings_b_id   int     NOT NULL    REFERENCES siblings_b (id),
 );
 ```
+- Tables with adjectives in their name **must** use the singular form of those adjectives.
+```
+/* The first table implies groups specifically for parent entities.
+ * The second table implies a one-to-many relationship between parent entities
+ * in the parents table and group entities in the parents_groups table.
+ */
+
+-- YES
+CREATE TABLE parent_groups (
+    id  serial  PRIMARY KEY
+);
+
+-- No
+CREATE TABLE parents_groups (
+    id  serial  PRIMARY KEY
+);
+```
 - Hungarian notation **must not** be used.
 ```
 -- YES
