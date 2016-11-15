@@ -54,7 +54,7 @@ def get_configuration(project_name, depth, _configuration_file=None):
 
     Returns
     -------
-    Dictionary
+    dict
         Parsed configuration.
 
     Raises
