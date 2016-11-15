@@ -11,3 +11,12 @@ REVOKE USAGE ON ALL SEQUENCES IN SCHEMA public FROM mfit;
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO mfit_testing;
 GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO mfit_testing;
+
+INSERT INTO routines_units (
+	name,
+	created_by
+)
+VALUES
+	('liters', -1),
+	('repetitions', -1),
+	('seconds', -1);
