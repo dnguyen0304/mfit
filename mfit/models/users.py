@@ -44,8 +44,8 @@ class Users(models.Base):
             Forename.
         last_name : str
             Surname.
-        habit_groups : list of mfit.models.HabitGroups
-            Collection of Habit Groups entities.
+        habit_groups : list of mfit.models.Attempts
+            Collection of Attempts entities.
         created_at : datetime.datetime
             When the entity was originally created.
         created_by : int

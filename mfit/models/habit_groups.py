@@ -32,10 +32,10 @@ class HabitGroups(models.Base):
             Unique identifier.
         name : str
             Name.
-        users : list of mfit.models.Users
-            Collection of Users entities.
-        habits : mfit.models.Routines
-            Routines model.
+        users : list of mfit.models.Attempts
+            Collection of Attempts entities.
+        habits : list of mfit.models.Routines
+            Collection of Routines entities.
         created_at : datetime.datetime
             When the entity was originally created.
         created_by : int

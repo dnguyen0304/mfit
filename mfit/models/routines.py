@@ -37,15 +37,15 @@ class Routines(models.Base):
         Parameters
         ----------
         habit_group : mfit.models.HabitGroups
-            Habit Groups model.
+            Habit Groups entity.
         habit : mfit.models.Habits
-            Habits model.
+            Habits entity.
         sets : int
             Number of sets for the corresponding habit.
         value : int
             Number of units (repetitions, seconds, etc.) per set.
         routines_unit : mfit.models.RoutinesUnits
-            Routines Units model.
+            Routines Units entity.
         sort_order : int, optional
             Sort order. Defaults to 1.
 
@@ -54,11 +54,11 @@ class Routines(models.Base):
         id : int
             Unique identifier.
         habit_group : mfit.models.HabitGroups
-            Habit Groups model.
+            Habit Groups entity.
         habit_groups_id : int
             Habit Groups unique identifier.
         habit : mfit.models.Habits
-            Habits model.
+            Habits entity.
         habit_id : int
             Habits unique identifier.
         sets : int
@@ -66,7 +66,7 @@ class Routines(models.Base):
         value : int
             Number of units (repetitions, seconds, etc.) per set.
         routines_unit : mfit.models.RoutinesUnits
-            Routines Units model.
+            Routines Units entity.
         routines_units_id : int
             Routines Units unique identifier.
         sort_order : int, optional
