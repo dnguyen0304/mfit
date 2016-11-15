@@ -43,9 +43,9 @@ def get_configuration(project_name, depth, _configuration_file=None):
 
     Parameters
     ----------
-    project_name : String
+    project_name : str
         Project name.
-    depth : Integer
+    depth : int
         Number of layers (i.e. sub-directories) between the
         configuration file and this source code file. A depth of 0
         implies both files are in the same directory.
