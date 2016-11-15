@@ -25,6 +25,7 @@ class Attempts(models.Base):
     #   http://stackoverflow.com/a/7524753.
     user = relationship('Users', back_populates='habit_groups')
     habit_group = relationship('HabitGroups', back_populates='users')
+    logs = relationship('AttemptsLogs', back_populates='attempt')
 
     def __init__(self, user, habit_group, starts_at=None, ends_at=None):
 
@@ -58,6 +59,8 @@ class Attempts(models.Base):
             When the attempt starts. Defaults to `None`.
         ends_at : datetime.datetime, optional
             When the attempt ends. Defaults to `None`.
+        logs : list of mfit.models.AttemptsLogs
+            Collection of Attempts Logs entities.
         created_at : datetime.datetime
             When the entity was originally created.
         created_by : int

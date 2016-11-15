@@ -14,6 +14,7 @@ class Habits(models.Base):
     name = Column()
 
     habit_groups = relationship('Routines', back_populates='habit')
+    attempts_logs = relationship('AttemptsLogs', back_populates='habit')
 
     def __init__(self, name):
 
@@ -33,6 +34,8 @@ class Habits(models.Base):
             Name.
         habit_groups : list of mfit.models.Routines
             Collection of Routines entities.
+        attempts_logs : list of mfit.models.AttemptsLogs
+            Collection of Attempts Logs entities.
         created_at : datetime.datetime
             When the entity was originally created.
         created_by : int
