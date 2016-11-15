@@ -107,3 +107,9 @@ CREATE TABLE users (
 - Column constraints **should** trend towards being restrictive.
 - Data type constraints **should** trend towards being more relaxed.
 - Datetime (data types that store both date and time) columns **must** include the time zone.
+
+Python
+------
+### General
+- Import statements **should** be sorted to enforce import order.
+- `__all__` indices **should** be sorted alphabetically.
