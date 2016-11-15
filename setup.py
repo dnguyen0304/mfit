@@ -8,7 +8,7 @@ import site
 import sys
 
 if __name__ == '__main__':
-    project_name = 'mfit_service'
+    project_name = 'mfit'
 
     with open('./README.md', 'r') as file:
         long_description = file.read()
@@ -23,11 +23,7 @@ if __name__ == '__main__':
                      url='https://github.com/dnguyen0304/{}.git'.format(project_name),
                      author='Duy Nguyen',
                      author_email='dnguyen0304@gmail.com',
-                     packages=[project_name,
-                               project_name + '.models',
-                               project_name + '.resources',
-                               project_name + '.services',
-                               project_name + '.views'],
+                     packages=[project_name],
                      install_requires=install_requires,
                      test_suite='nose.collector',
                      tests_require=['nose'],
