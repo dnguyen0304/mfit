@@ -30,21 +30,21 @@ class Users(models.Base):
 
         Attributes
         ----------
-        id : Integer
+        id : int
             Unique identifier.
-        email_address : String
+        email_address : str
             Email address.
-        first_name : String
+        first_name : str
             Forename.
-        last_name : String
+        last_name : str
             Surname.
         created_at : datetime.datetime
             When the entity was originally created.
-        created_by : Integer
+        created_by : int
             Who originally created the entity.
         updated_at : datetime.datetime
             When the entity was last updated.
-        updated_by : Integer
+        updated_by : int
             Who last updated the entity.
         """
 
