@@ -18,7 +18,7 @@ class Users(models.Base):
     first_name = Column()
     last_name = Column()
 
-    habit_groups = relationship('HabitGroups', back_populates='user')
+    habit_groups = relationship('Attempts', back_populates='user')
 
     def __init__(self, email_address, first_name, last_name):
 
