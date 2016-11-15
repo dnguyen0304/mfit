@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from sqlalchemy import Column, Integer
+from sqlalchemy.orm import relationship
 
 from mfit import models
 
@@ -16,6 +17,8 @@ class Users(models.Base):
     email_address = Column()
     first_name = Column()
     last_name = Column()
+
+    habit_groups = relationship('HabitGroups', back_populates='user')
 
     def __init__(self, email_address, first_name, last_name):
 
@@ -41,6 +44,8 @@ class Users(models.Base):
             Forename.
         last_name : str
             Surname.
+        habit_groups : list of mfit.models.HabitGroups
+            Collection of Habit Groups entities.
         created_at : datetime.datetime
             When the entity was originally created.
         created_by : int

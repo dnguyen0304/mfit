@@ -13,6 +13,7 @@ class HabitGroups(models.Base):
     id = Column(Integer, primary_key=True)
     name = Column()
 
+    users = relationship('Attempts', back_populates='habit_group')
     habits = relationship('Routines', back_populates='habit_group')
 
     def __init__(self, name):
@@ -31,6 +32,8 @@ class HabitGroups(models.Base):
             Unique identifier.
         name : str
             Name.
+        users : list of mfit.models.Users
+            Collection of Users entities.
         habits : mfit.models.Routines
             Routines model.
         created_at : datetime.datetime
