@@ -21,11 +21,11 @@ class Users(models.Base):
 
         Parameters
         ----------
-        email_address : String
+        email_address : str
             Email address.
-        first_name : String
+        first_name : str
             Forename.
-        last_name : String
+        last_name : str
             Surname.
 
         Attributes
