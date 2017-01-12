@@ -116,3 +116,9 @@ Python
 
 ### Models
 - New models **should** be added to the package index (i.e. `__init__.py`).
+
+### Resources
+- *How to Create a New Resource*
+    - In the `resources` package, define the new module (`<resource_name>.py`).
+    - In the package index (`resources/__init__.py`), add a corresponding reference.
+    - In the API index (`mfit/app.py`), add a corresponding reference.

@@ -2,8 +2,17 @@
 
 import datetime
 
+import flask
+import flask_restful
 import sqlalchemy
 import sqlalchemy.orm
+
+from mfit import resources
+
+app = flask.Flask(__name__)
+api = flask_restful.Api(app=app)
+
+api.add_resource(resources.Root, '/v1/')
 
 
 class DBContext:
