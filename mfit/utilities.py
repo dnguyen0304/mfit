@@ -77,12 +77,12 @@ The project's environment could not be found in the shell environment.
 To set the project's environment for the current shell session, from the
 terminal run
 
-    export {environment_variable}='Production'
+    export {environment_variable}="Production"
 
 To set the project's environment for the current and all future shell
 sessions, from the terminal run
 
-    echo 'export {environment_variable}='Production' >> ~/.bashrc
+    echo 'export {environment_variable}="Production"' >> ~/.bashrc
 
 Below is the list of acceptable values. Note they are case-sensitive.
     - Production
