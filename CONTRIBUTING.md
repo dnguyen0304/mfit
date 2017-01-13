@@ -11,8 +11,8 @@ Database
 ### Naming Convention
 - In general, lowercase_delimited_by_underscores **should** be used.
 - Tables **must** be named with the plural form of their entity.
-- Primary keys **must** be named "id".
-- Foreign keys **must** be named <table_name> + "_id".
+- Primary keys **must** be named `id`.
+- Foreign keys **must** be named `<table_name>_id`.
 ```
 -- YES
 CREATE TABLE parents (
@@ -20,7 +20,7 @@ CREATE TABLE parents (
     children_id int     NOT NULL    REFERENCES children (id)
 );
 ```
-- Tables describing one-to-many relationships **should** be named <parent_table>_<child_table>.
+- Tables describing one-to-many relationships **should** be named `<parent_table>_<child_table>`.
 - Tables describing many-to-many relationships **must** start a new naming convention hierarchy.
 ```
 /* There are sibling A entities in the siblings_a table.
