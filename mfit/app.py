@@ -13,7 +13,6 @@ app = flask.Flask(__name__)
 api = flask_restful.Api(app=app)
 
 api.add_resource(resources.Root, '/v1/')
-api.add_resource(resources.Users, '/v1/users/<int:id>')
 
 
 class DBContext:
