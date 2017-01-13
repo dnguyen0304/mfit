@@ -15,8 +15,8 @@ class AttemptsLogs(models.Base):
     habits_id = Column(ForeignKey('habits.id'))
     sets_remaining = Column()
 
-    attempt = relationship('Attempts', back_populates='habits')
-    habit = relationship('Habits', back_populates='attempts')
+    attempt = relationship('Attempts', back_populates='logs')
+    habit = relationship('Habits', back_populates='attempts_logs')
 
     def __init__(self, attempt, habit, sets_remaining):
 
