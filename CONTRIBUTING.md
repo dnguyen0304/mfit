@@ -119,6 +119,8 @@ Python
 
 ### Resources
 - *How to Create a New Resource*
-    - In the `resources` package, define the new module (`<resource_name>.py`).
+    - In the `views` package, define a new `<resource_name>.py` module.
+    - In the package index (`views/__init__.py`), add a corresponding reference.
+    - In the `resources` package, define a new `<resource_name>.py` module.
     - In the package index (`resources/__init__.py`), add a corresponding reference.
     - In the API index (`mfit/app.py`), add a corresponding reference.
