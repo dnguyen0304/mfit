@@ -9,10 +9,10 @@ from mfit import models
 from mfit import resources
 
 
-class UsersCollection(resources.Base):
+class UsersCollection(resources.BaseCollection):
 
     def get(self):
-        uris = [resources.Users.get_self_link(user=user)
+        uris = [resources.Users.get_self_link(entity=user)
                 for user
                 in self._db_context.query(models.Users).all()]
 
@@ -30,5 +30,5 @@ class UsersCollection(resources.Base):
         self._db_context.commit()
         self._db_context.close()
 
-        return resources.Users.to_json(user=user)
+        return resources.Users.to_json(entity=user)
 
