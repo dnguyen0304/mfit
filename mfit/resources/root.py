@@ -9,16 +9,18 @@ from mfit import resources
 class Root(resources._Base):
 
     def get(self):
+        data = [
+            {
+                'users': app.api.url_for(resources.UsersCollection, _external=True)
+            },
+            {
+                'habit_groups': app.api.url_for(resources.HabitGroupsCollection, _external=True)
+            }
+        ]
+
         links = {
             'self': app.api.url_for(Root, _external=True)
         }
 
-        relationships = {
-            'users_uri': app.api.url_for(resources.UsersCollection, _external=True)
-        }
-
-        body = collections.OrderedDict([('relationships', relationships),
-                                        ('links', links)])
-
-        return body
+        return collections.OrderedDict([('data', data), ('links', links)])
 
