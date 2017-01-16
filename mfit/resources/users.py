@@ -26,12 +26,9 @@ class Users(resources.Base):
 
         self._db_context.add(user, updated_by=192)
         self._db_context.commit()
-
-        body = Users.to_json(user=user)
-
         self._db_context.close()
 
-        return body
+        return Users.to_json(user=user)
 
     def delete(self, id):
         try:
