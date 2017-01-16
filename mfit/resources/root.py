@@ -18,6 +18,9 @@ class Root(resources._Base):
             },
             {
                 'habits': app.api.url_for(resources.HabitsCollection, _external=True)
+            },
+            {
+                'routines': app.api.url_for(resources.RoutinesCollection, _external=True)
             }
         ]
 

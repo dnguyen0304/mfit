@@ -10,6 +10,7 @@ from mfit.resources.habit_groups_collection import HabitGroupsCollection
 from mfit.resources.habits import Habits
 from mfit.resources.habits_collection import HabitsCollection
 from mfit.resources.routines import Routines
+from mfit.resources.routines_collection import RoutinesCollection
 
 __all__ = ['Base',
            'BaseCollection',
@@ -19,6 +20,7 @@ __all__ = ['Base',
            'HabitsCollection',
            'Root',
            'Routines',
+           'RoutinesCollection',
            'Users',
            'UsersCollection']
 
