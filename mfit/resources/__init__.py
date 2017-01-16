@@ -9,10 +9,12 @@ from mfit.resources.habit_groups import HabitGroups
 from mfit.resources.habit_groups_collection import HabitGroupsCollection
 from mfit.resources.habits import Habits
 from mfit.resources.habits_collection import HabitsCollection
+from mfit.resources.attempts import Attempts
 from mfit.resources.routines import Routines
 from mfit.resources.routines_collection import RoutinesCollection
 
-__all__ = ['Base',
+__all__ = ['Attempts',
+           'Base',
            'BaseCollection',
            'HabitGroups',
            'HabitGroupsCollection',
