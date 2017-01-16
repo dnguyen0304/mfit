@@ -13,9 +13,11 @@ from mfit.resources.attempts import Attempts
 from mfit.resources.attempts_collection import AttemptsCollection
 from mfit.resources.routines import Routines
 from mfit.resources.routines_collection import RoutinesCollection
+from mfit.resources.attempts_logs import AttemptsLogs
 
 __all__ = ['Attempts',
            'AttemptsCollection',
+           'AttemptsLogs',
            'Base',
            'BaseCollection',
            'HabitGroups',

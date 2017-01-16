@@ -6,8 +6,10 @@ from mfit.views.habit_groups import HabitGroups
 from mfit.views.habits import Habits
 from mfit.views.attempts import Attempts
 from mfit.views.routines import Routines
+from mfit.views.attempts_logs import AttemptsLogs
 
 __all__ = ['Attempts',
+           'AttemptsLogs',
            'Base',
            'HabitGroups',
            'Habits',
