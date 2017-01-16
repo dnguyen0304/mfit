@@ -10,20 +10,23 @@ import mfit
 from mfit import app
 
 
-class Base(flask_restful.Resource):
-
-    _model = None
-    _resource = None
-    _view = None
+class _Base(flask_restful.Resource):
 
     def __init__(self):
         super().__init__()
 
         self._db_context_factory = app.DBContextFactory(
             connection_string=mfit.configuration['repositories']
-                                                ['PostgreSQL']
-                                                ['connection_string'])
+            ['PostgreSQL']
+            ['connection_string'])
         self._db_context = self._db_context_factory.create()
+
+
+class Base(_Base):
+
+    _model = None
+    _resource = None
+    _view = None
 
     def get(self, id):
         entity = self._get_or_404(id=id)

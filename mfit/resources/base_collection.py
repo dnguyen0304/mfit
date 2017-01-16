@@ -3,26 +3,16 @@
 import collections
 
 import flask
-import flask_restful
 
-import mfit
 from mfit import app
+from mfit import resources
 
 
-class BaseCollection(flask_restful.Resource):
+class BaseCollection(resources._Base):
 
     _model = None
     _resource = None
     _resource_collection = None
-
-    def __init__(self):
-        super().__init__()
-
-        self._db_context_factory = app.DBContextFactory(
-            connection_string=mfit.configuration['repositories']
-                                                ['PostgreSQL']
-                                                ['connection_string'])
-        self._db_context = self._db_context_factory.create()
 
     def get(self):
         data = [self._resource.get_self_link(entity=entity)
