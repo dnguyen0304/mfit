@@ -15,6 +15,9 @@ class Root(resources._Base):
             },
             {
                 'habit_groups': app.api.url_for(resources.HabitGroupsCollection, _external=True)
+            },
+            {
+                'habits': app.api.url_for(resources.HabitsCollection, _external=True)
             }
         ]
 
