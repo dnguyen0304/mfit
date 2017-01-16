@@ -6,7 +6,7 @@ from mfit import app
 from mfit import resources
 
 
-class Root(resources.Base):
+class Root(resources._Base):
 
     def get(self):
         links = {
