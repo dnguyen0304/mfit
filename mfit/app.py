@@ -16,6 +16,7 @@ api.add_resource(resources.Root, '/v1/')
 api.add_resource(resources.Users, '/v1/users/<int:id>')
 api.add_resource(resources.UsersCollection, '/v1/users/')
 api.add_resource(resources.HabitGroups, '/v1/habit_groups/<int:id>')
+api.add_resource(resources.HabitGroupsCollection, '/v1/habit_groups/')
 
 
 class DBContext:
