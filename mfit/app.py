@@ -20,6 +20,7 @@ api.add_resource(resources.HabitGroupsCollection, '/v1/habit_groups/')
 api.add_resource(resources.Habits, '/v1/habits/<int:id>')
 api.add_resource(resources.HabitsCollection, '/v1/habits/')
 api.add_resource(resources.Attempts, '/v1/attempts/<int:id>')
+api.add_resource(resources.AttemptsCollection, '/v1/attempts/')
 api.add_resource(resources.Routines, '/v1/routines/<int:id>')
 api.add_resource(resources.RoutinesCollection, '/v1/routines/')
 
