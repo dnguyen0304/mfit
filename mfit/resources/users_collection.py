@@ -12,7 +12,7 @@ from mfit import resources
 class UsersCollection(resources.BaseCollection):
 
     def get(self):
-        uris = [resources.Users.get_self_link(entity=user)
+        data = [resources.Users.get_self_link(entity=user)
                 for user
                 in self._db_context.query(models.Users).all()]
 
@@ -20,8 +20,7 @@ class UsersCollection(resources.BaseCollection):
             'self': app.api.url_for(UsersCollection, _external=True)
         }
 
-        return collections.OrderedDict([('uris', uris),
-                                        ('links', links)])
+        return collections.OrderedDict([('data', data), ('links', links)])
 
     def post(self):
         user = models.Users(**flask.request.get_json())
