@@ -119,9 +119,11 @@ Python
 
 ### Resources
 - *How to Create a New Resource*
-    - In the `views` package, define a new `<resource_name>.py` module.
-    - In the package index (`views/__init__.py`), add a corresponding reference.
+    - For singleton resources, in the `views` package, define a new `<resource_name>.py` module.
+    - For singleton resources, in the package index (`views/__init__.py`), add a corresponding reference.
     - In the `resources` package, define a new `<resource_name>.py` module.
     - In the package index (`resources/__init__.py`), add a corresponding reference.
     - In the API index (`mfit/app.py`), add a corresponding reference.
-    - For collection resources, in the root `relationships` index (`resources/root.py`), add a corresponding reference.
+    - For singleton resources, create a corresponding collection resource.
+    - For collection resources, in the root resource's `relationships` index (`resources/root.py`), add a corresponding reference.
+    - For sub-resources, in the parent's view's `relationships` object, add a corresponding reference.
