@@ -3,16 +3,10 @@
 
 import datetime
 
-import flask
-import flask_restful
 import sqlalchemy
 import sqlalchemy.orm
 
 import mfit
-from mfit import utilities
-
-app = flask.Flask(__name__)
-api = flask_restful.Api(app=app)
 
 
 class DBContext:
@@ -146,8 +140,5 @@ class DBContextFactory:
 
 
 if __name__ == '__main__':
-    if mfit.configuration['environment'] == utilities.Environment.Production.name:
-        app.run()
-    else:
-        app.run(debug=True)
+    mfit.main()
 

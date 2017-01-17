@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from mfit import app
 from mfit.resources.base import _Base, Base
 from mfit.resources.base_collection import BaseCollection
 from mfit.resources.root import Root
@@ -32,18 +31,4 @@ __all__ = ['Attempts',
            'RoutinesCollection',
            'Users',
            'UsersCollection']
-
-app.api.add_resource(Root, '/v1/')
-app.api.add_resource(Users, '/v1/users/<int:id>')
-app.api.add_resource(UsersCollection, '/v1/users/')
-app.api.add_resource(HabitGroups, '/v1/habit_groups/<int:id>')
-app.api.add_resource(HabitGroupsCollection, '/v1/habit_groups/')
-app.api.add_resource(Habits, '/v1/habits/<int:id>')
-app.api.add_resource(HabitsCollection, '/v1/habits/')
-app.api.add_resource(Attempts, '/v1/attempts/<int:id>')
-app.api.add_resource(AttemptsCollection, '/v1/attempts/')
-app.api.add_resource(Routines, '/v1/routines/<int:id>')
-app.api.add_resource(RoutinesCollection, '/v1/routines/')
-app.api.add_resource(AttemptsLogs, '/v1/attempts/<int:attempts_id>/logs/<int:id>')
-app.api.add_resource(AttemptsLogsCollection, '/v1/attempts/<int:attempts_id>/logs/')
 

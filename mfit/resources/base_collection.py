@@ -4,7 +4,7 @@ import collections
 
 import flask
 
-from mfit import app
+import mfit
 from mfit import resources
 
 
@@ -20,7 +20,7 @@ class BaseCollection(resources._Base):
                 in self._db_context.query(self._model).all()]
 
         links = {
-            'self': app.api.url_for(self._resource_collection, _external=True)
+            'self': mfit.api.url_for(self._resource_collection, _external=True)
         }
 
         return collections.OrderedDict([('data', data), ('links', links)])

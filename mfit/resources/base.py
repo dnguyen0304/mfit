@@ -83,7 +83,7 @@ class Base(_Base):
 
     @classmethod
     def get_self_link(cls, entity):
-        return app.api.url_for(cls._resource, id=entity.id, _external=True)
+        return mfit.api.url_for(cls._resource, id=entity.id, _external=True)
 
     @classmethod
     def to_json(cls, entity):
