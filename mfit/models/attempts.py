@@ -13,6 +13,7 @@ class Attempts(models.Base):
     id = Column(Integer, primary_key=True)
     users_id = Column(ForeignKey('users.id'))
     habit_groups_id = Column(ForeignKey('habit_groups.id'))
+    # Should these attributes use past tense verbs for consistency?
     starts_at = Column()
     ends_at = Column()
 

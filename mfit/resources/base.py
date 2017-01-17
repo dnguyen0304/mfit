@@ -17,8 +17,8 @@ class _Base(flask_restful.Resource):
 
         self._db_context_factory = app.DBContextFactory(
             connection_string=mfit.configuration['repositories']
-            ['PostgreSQL']
-            ['connection_string'])
+                                                ['PostgreSQL']
+                                                ['connection_string'])
         self._db_context = self._db_context_factory.create()
 
 

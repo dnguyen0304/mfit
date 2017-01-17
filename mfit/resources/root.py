@@ -11,7 +11,7 @@ class Root(resources._Base):
     def get(self):
         data = [
             {
-                'users': app.api.url_for(resources.UsersCollection, _external=True)
+                'attempts': app.api.url_for(resources.AttemptsCollection, _external=True)
             },
             {
                 'habit_groups': app.api.url_for(resources.HabitGroupsCollection, _external=True)
@@ -20,10 +20,10 @@ class Root(resources._Base):
                 'habits': app.api.url_for(resources.HabitsCollection, _external=True)
             },
             {
-                'attempts': app.api.url_for(resources.AttemptsCollection, _external=True)
+                'routines': app.api.url_for(resources.RoutinesCollection, _external=True)
             },
             {
-                'routines': app.api.url_for(resources.RoutinesCollection, _external=True)
+                'users': app.api.url_for(resources.UsersCollection, _external=True)
             }
         ]
 
