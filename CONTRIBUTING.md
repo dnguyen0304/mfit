@@ -11,8 +11,8 @@ Database
 ### Naming Convention
 - In general, lowercase_delimited_by_underscores **should** be used.
 - Tables **must** be named with the plural form of their entity.
-- Primary keys **must** be named "id".
-- Foreign keys **must** be named <table_name> + "_id".
+- Primary keys **must** be named `id`.
+- Foreign keys **must** be named `<table_name>_id`.
 ```
 -- YES
 CREATE TABLE parents (
@@ -20,7 +20,7 @@ CREATE TABLE parents (
     children_id int     NOT NULL    REFERENCES children (id)
 );
 ```
-- Tables describing one-to-many relationships **should** be named <parent_table>_<child_table>.
+- Tables describing one-to-many relationships **should** be named `<parent_table>_<child_table>`.
 - Tables describing many-to-many relationships **must** start a new naming convention hierarchy.
 ```
 /* There are sibling A entities in the siblings_a table.
@@ -39,6 +39,23 @@ CREATE TABLE siblings_a_siblings_b (
     id              serial              PRIMARY KEY,
     siblings_a_id   int     NOT NULL    REFERENCES siblings_a (id),
     siblings_b_id   int     NOT NULL    REFERENCES siblings_b (id),
+);
+```
+- Tables with adjectives in their name **must** use the singular form of those adjectives.
+```
+/* The first table implies groups specifically for parent entities.
+ * The second table implies a one-to-many relationship between parent entities
+ * in the parents table and group entities in the parents_groups table.
+ */
+
+-- YES
+CREATE TABLE parent_groups (
+    id  serial  PRIMARY KEY
+);
+
+-- No
+CREATE TABLE parents_groups (
+    id  serial  PRIMARY KEY
 );
 ```
 - Hungarian notation **must not** be used.
@@ -90,3 +107,23 @@ CREATE TABLE users (
 - Column constraints **should** trend towards being restrictive.
 - Data type constraints **should** trend towards being more relaxed.
 - Datetime (data types that store both date and time) columns **must** include the time zone.
+
+Python
+------
+### General
+- Import statements **should** be sorted to enforce import order.
+- `__all__` indices **should** be sorted alphabetically.
+
+### Models
+- New models **should** be added to the package index (i.e. `__init__.py`).
+
+### Resources
+- *How to Create a New Resource*
+    - For singleton resources, in the `views` package, define a new `<resource_name>.py` module.
+    - For singleton resources, in the package index (`views/__init__.py`), add a corresponding reference.
+    - In the `resources` package, define a new `<resource_name>.py` module.
+    - In the package index (`resources/__init__.py`), add a corresponding reference.
+    - In the API index (`mfit/app.py`), add a corresponding reference.
+    - For singleton resources, create a corresponding collection resource.
+    - For collection resources, in the root resource's `relationships` index (`resources/root.py`), add a corresponding reference.
+    - For sub-resources, in the parent's view's `relationships` object, add a corresponding reference.
