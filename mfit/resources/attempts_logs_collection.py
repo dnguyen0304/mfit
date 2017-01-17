@@ -22,15 +22,19 @@ class AttemptsLogsCollection(resources.BaseCollection):
                 in attempts_logs]
 
         links = {
-            'self': app.api.url_for(AttemptsLogsCollection,
-                                    attempts_id=attempts_id,
-                                    _external=True)
+            'self': self.get_self_link(entity=attempts_logs[0].attempt)
         }
 
         return collections.OrderedDict([('data', data), ('links', links)])
 
     def post(self, attempts_id):
         return super().post()
+
+    @classmethod
+    def get_self_link(cls, entity):
+        return app.api.url_for(cls._resource_collection,
+                               attempts_id=entity.id,
+                               _external=True)
 
 
 AttemptsLogsCollection._resource_collection = AttemptsLogsCollection

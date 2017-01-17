@@ -24,6 +24,7 @@ class Attempts(views.Base):
             entity=attempt.user)
         attempt.relationships['habit_group'] = resources.HabitGroups.get_self_link(
             entity=attempt.habit_group)
-        # attempt.relationships['logs'] =
+        attempt.relationships['logs'] = resources.AttemptsLogsCollection.get_self_link(
+            entity=attempt)
         return attempt
 
