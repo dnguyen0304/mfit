@@ -24,6 +24,7 @@ api.add_resource(resources.AttemptsCollection, '/v1/attempts/')
 api.add_resource(resources.Routines, '/v1/routines/<int:id>')
 api.add_resource(resources.RoutinesCollection, '/v1/routines/')
 api.add_resource(resources.AttemptsLogs, '/v1/attempts/<int:attempts_id>/logs/<int:id>')
+api.add_resource(resources.AttemptsLogsCollection, '/v1/attempts/<int:attempts_id>/logs/')
 
 
 class DBContext:
