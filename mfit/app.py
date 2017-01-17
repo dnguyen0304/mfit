@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import datetime
@@ -7,24 +8,11 @@ import flask_restful
 import sqlalchemy
 import sqlalchemy.orm
 
-from mfit import resources
+import mfit
+from mfit import utilities
 
 app = flask.Flask(__name__)
 api = flask_restful.Api(app=app)
-
-api.add_resource(resources.Root, '/v1/')
-api.add_resource(resources.Users, '/v1/users/<int:id>')
-api.add_resource(resources.UsersCollection, '/v1/users/')
-api.add_resource(resources.HabitGroups, '/v1/habit_groups/<int:id>')
-api.add_resource(resources.HabitGroupsCollection, '/v1/habit_groups/')
-api.add_resource(resources.Habits, '/v1/habits/<int:id>')
-api.add_resource(resources.HabitsCollection, '/v1/habits/')
-api.add_resource(resources.Attempts, '/v1/attempts/<int:id>')
-api.add_resource(resources.AttemptsCollection, '/v1/attempts/')
-api.add_resource(resources.Routines, '/v1/routines/<int:id>')
-api.add_resource(resources.RoutinesCollection, '/v1/routines/')
-api.add_resource(resources.AttemptsLogs, '/v1/attempts/<int:attempts_id>/logs/<int:id>')
-api.add_resource(resources.AttemptsLogsCollection, '/v1/attempts/<int:attempts_id>/logs/')
 
 
 class DBContext:
@@ -155,4 +143,11 @@ class DBContextFactory:
         # close the session?
         session = self._SessionFactory()
         return DBContext(session=session)
+
+
+if __name__ == '__main__':
+    if mfit.configuration['environment'] == utilities.Environment.Production.name:
+        app.run()
+    else:
+        app.run(debug=True)
 
