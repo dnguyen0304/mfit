@@ -13,9 +13,13 @@ class AttemptsLogsCollection(resources.BaseCollection):
     _resource = resources.AttemptsLogs
 
     def get(self, attempts_id):
+        attempts_logs = self._db_context.query(self._model) \
+                                        .filter_by(attempts_id=attempts_id) \
+                                        .all()
+
         data = [self._resource.get_self_link(entity=attempts_log)
                 for attempts_log
-                in self._db_context.query(self._model).all()]
+                in attempts_logs]
 
         links = {
             'self': app.api.url_for(AttemptsLogsCollection,
