@@ -2,6 +2,7 @@
 
 import collections
 import datetime
+import http
 
 import flask
 import flask_restful
@@ -182,14 +183,17 @@ class Base(_Base):
         return body
 
     def delete(self, id):
-        try:
-            self._db_context.query(self._model) \
-                            .filter_by(id=id) \
-                            .delete(synchronize_session=False)
-        except (orm.exc.NoResultFound, orm.exc.MultipleResultsFound):
-            flask_restful.abort(404)
+        matched_entities_count = (
+            self._db_context.query(self._model)
+                            .filter_by(id=id)
+                            .delete(synchronize_session=False))
+        if matched_entities_count == 0:
+            return dict(), http.HTTPStatus.NOT_FOUND
+
         self._db_context.commit()
         self._db_context.close()
+
+        return dict(), http.HTTPStatus.NO_CONTENT
 
     def _get_or_404(self, id):
 
