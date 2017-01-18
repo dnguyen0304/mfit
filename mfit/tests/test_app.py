@@ -1,62 +1,52 @@
 # -*- coding: utf-8 -*-
 
-import uuid
+import argparse
 
-import sqlalchemy
-import sqlalchemy.exc
-from nose.tools import assert_true, raises
+from nose.tools import (assert_false,
+                        assert_is_instance,
+                        assert_list_equal,
+                        assert_true,
+                        raises)
 
-import mfit
 from mfit import app
-from mfit import models
 
 
-class TestDBContext:
+class TestArgumentParser:
 
     def __init__(self):
-        db_context_factory = app.DBContextFactory(
-            connection_string=mfit.configuration['repositories']['PostgreSQL']['connection_string'])
-        self.db_context = db_context_factory.create()
+        self.argument_parser = app.get_argument_parser()
 
-        self.user = models.Users(
-            email_address='bruiser.cornelius@{}.com'.format(uuid.uuid4()),
-            first_name='Bruiser',
-            last_name='Nguyen')
+    def test_return_type(self):
+        output = self.argument_parser.parse_args(args='')
+        assert_is_instance(output, tuple)
+        assert_is_instance(output[0], argparse.Namespace)
+        assert_is_instance(output[1], list)
 
-    def test_create_new_entity(self):
-        self.db_context.add(self.user, created_by=-1)
-        self.db_context.commit()
+    def test_no_arguments(self):
+        args, test_runner_args = self.argument_parser.parse_args(args='')
+        assert_false(args.in_test_mode)
+        assert_list_equal(test_runner_args, list())
 
-        assert_true(sqlalchemy.inspect(self.user).persistent)
+    def test_in_test_mode(self):
+        args = '--in-test-mode'.split()
+        args, test_runner_args = self.argument_parser.parse_args(args=args)
+        assert_true(args.in_test_mode)
+        assert_list_equal(test_runner_args, list())
 
-    @raises(TypeError)
-    def test_create_new_entity_without_specifying_created_by(self):
-        self.db_context.add(self.user)
+    def test_in_test_mode_with_test_runner_options(self):
+        args = '--in-test-mode --foo'.split()
+        args, test_runner_args = self.argument_parser.parse_args(args=args)
+        assert_true(args.in_test_mode)
+        assert_list_equal(test_runner_args, ['--foo'])
 
-    def test_update_entity(self):
-        self.db_context.add(self.user, created_by=-1)
-        self.db_context.commit()
+    def test_in_test_mode_with_test_runner_options_reversed_sort_order(self):
+        args = '--foo --in-test-mode'.split()
+        args, test_runner_args = self.argument_parser.parse_args(args=args)
+        assert_true(args.in_test_mode)
+        assert_list_equal(test_runner_args, ['--foo'])
 
-        self.user.first_name = 'foo'
-        self.db_context.add(self.user, updated_by=-1)
-        self.db_context.commit()
-
-        assert_true(sqlalchemy.inspect(self.user).persistent)
-
-    @raises(TypeError)
-    def test_update_entity_without_updated_by_argument(self):
-        self.db_context.add(self.user, created_by=-1)
-        self.db_context.commit()
-
-        self.user.first_name = 'foo'
-        self.db_context.add(self.user)
-
-    def teardown(self):
-        try:
-            self.db_context.delete(self.user)
-            self.db_context.commit()
-        except sqlalchemy.exc.InvalidRequestError:
-            pass
-        finally:
-            self.db_context.close()
+    @raises(SystemExit)
+    def test_test_runner_options_without_in_test_mode(self):
+        args = '--foo'.split()
+        self.argument_parser.parse_args(args=args)
 

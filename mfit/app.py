@@ -1,158 +1,93 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import datetime
+"""
+mFit REST API.
 
-import flask
-import flask_restful
-import sqlalchemy
-import sqlalchemy.orm
+This is the entry point for managing the API. This package is designed
+to be started as a service rather than called as an external library.
+To start the service, from the terminal run
 
-from mfit import resources
+    python mfit/app.py
 
-app = flask.Flask(__name__)
-api = flask_restful.Api(app=app)
+"""
 
-api.add_resource(resources.Root, '/v1/')
-api.add_resource(resources.Users, '/v1/users/<int:id>')
-api.add_resource(resources.UsersCollection, '/v1/users/')
-api.add_resource(resources.HabitGroups, '/v1/habit_groups/<int:id>')
-api.add_resource(resources.HabitGroupsCollection, '/v1/habit_groups/')
-api.add_resource(resources.Habits, '/v1/habits/<int:id>')
-api.add_resource(resources.HabitsCollection, '/v1/habits/')
-api.add_resource(resources.Attempts, '/v1/attempts/<int:id>')
-api.add_resource(resources.AttemptsCollection, '/v1/attempts/')
-api.add_resource(resources.Routines, '/v1/routines/<int:id>')
-api.add_resource(resources.RoutinesCollection, '/v1/routines/')
-api.add_resource(resources.AttemptsLogs, '/v1/attempts/<int:attempts_id>/logs/<int:id>')
-api.add_resource(resources.AttemptsLogsCollection, '/v1/attempts/<int:attempts_id>/logs/')
+import argparse
+
+import mfit
 
 
-class DBContext:
+class ArgumentParser(argparse.ArgumentParser):
 
-    def __init__(self, session):
+    def parse_args(self, args=None, namespace=None):
 
         """
-        Decorator class that manages persistence operations for
-        ORM-mapped objects.
+        Parse the arguments that have been passed to the command-line
+        utility.
+
+        Extends argparse.ArgumentParser.parse_args(). The standard
+        library argument parser cannot handle the situation where a
+        command-line utility accepts an optional flag and then
+        an arbitrary number of remaining arguments (i.e.
+        nargs=argparse.REMAINDER).
 
         Parameters
         ----------
-        session : sqlalchemy.orm.session.Session
-            Session instance.
-
-        See Also
-        --------
-        sqlalchemy.orm.session.Session
-        """
-
-        # Composition must be used instead of inheritance because
-        # SQLAlchemy Sessions are always accessed through a factory.
-        self._session = session
-
-    def add(self, entity, created_by=None, updated_by=None):
-
-        """
-        Decorator method.
-
-        Extends the SQLAlchemy Session's `add()` to require specifying
-        the `created_by` or `updated_by` information given the
-        respective condition. The appropriate `created_at` or
-        `updated_at` field is set to the current UTC date and time.
-
-        Parameters
-        ----------
-        entity : Variable
-            Domain model instance.
-        created_by : datetime.datetime, optional
-            Unique identifier for the user who created the entity. This
-            parameter is required only when the entity is being
-            created. Defaults to `None`.
-        updated_by : datetime.datetime, optional
-            Unique identifier for the user who updated the entity. This
-            parameter is required only when the entity is being
-            updated. Defaults to `None`.
+        args : str, optional
+            Defaults to None.
+        namespace : argparse.Namespace, optional
+            Defaults to None.
 
         Returns
         -------
-        None
-
-        Raises
-        ------
-        TypeError
-            If the `created_by` or `updated_by` information was not
-            specified given the respective condition.
+        tuple
+            Two-element tuple. The first element is a populated
+            argparse.Namespace. The second element is a list of strings
+            of arguments for the test runner.
 
         See Also
         --------
-        sqlalchemy.orm.session.Session
+        argparse.ArgumentParser.parse_args()
+        argparse.ArgumentParser.parse_known_args()
         """
 
-        should_be_persisted = True
-        message = 'add() missing 1 required positional argument: "{}"'
-
-        entity_state = sqlalchemy.inspect(entity)
-
-        if entity_state.transient:
-            if created_by is None:
-                raise TypeError(message.format('created_by'))
-            else:
-                entity.created_at = datetime.datetime.utcnow()
-                entity.created_by = created_by
-        elif entity_state.persistent:
-            if entity not in self._session.dirty:
-                should_be_persisted = False
-            elif updated_by is None:
-                raise TypeError(message.format('updated_by'))
-            else:
-                entity.updated_at = datetime.datetime.utcnow()
-                entity.updated_by = updated_by
-
-        if should_be_persisted:
-            self._session.add(entity)
-
-    def __getattr__(self, name):
-        return getattr(self._session, name)
+        args_, test_runner_args = self.parse_known_args(args=args,
+                                                        namespace=namespace)
+        if not args_.in_test_mode and test_runner_args:
+            args_ = super().parse_args(args=args, namespace=namespace)
+        return args_, test_runner_args
 
 
-class DBContextFactory:
+def get_argument_parser():
 
-    def __init__(self, connection_string):
+    """
+    Get a configured ArgumentParser.
 
-        """
-        Factory class for producing DBContexts.
+    Returns
+    -------
+    app.ArgumentParser
+    """
 
-        Parameters
-        ----------
-        connection_string : str
-            Formatted string containing host and authentication
-            information.
-        """
+    in_test_mode_help = ("Run the test suite. All remaining (i.e. unmatched) "
+                         "arguments are passed to the test runner. "
+                         "Acceptable values are equivalent to those for the "
+                         "`nose` framework.")
 
-        engine = sqlalchemy.create_engine(connection_string)
-        SessionFactory = sqlalchemy.orm.sessionmaker()
-        SessionFactory.configure(bind=engine)
+    parser = ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('--in-test-mode',
+                        dest='in_test_mode',
+                        action='store_true',
+                        help=in_test_mode_help)
 
-        self._SessionFactory = sqlalchemy.orm.scoped_session(SessionFactory)
+    return parser
 
-    def create(self):
 
-        """
-        Produce an object configured as specified.
+if __name__ == '__main__':
+    argument_parser = get_argument_parser()
+    args, test_runner_args = argument_parser.parse_args()
 
-        Returns
-        -------
-        DBContext
-
-        References
-        ----------
-        See the Stack Overflow answer for more details [1].
-
-        .. [1] zzzeek, "SQLAlchemy: Creating vs. Reusing a Session",
-           http://stackoverflow.com/a/12223711.
-        """
-
-        # Should this dispose the engine, close the connection, and / or
-        # close the session?
-        session = self._SessionFactory()
-        return DBContext(session=session)
+    mfit.main(in_test_mode=args.in_test_mode,
+              test_runner_args=test_runner_args)
 
