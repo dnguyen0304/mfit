@@ -7,6 +7,7 @@ import http
 import flask
 import flask_restful
 import sqlalchemy
+import werkzeug.exceptions
 from sqlalchemy import orm
 
 import mfit
@@ -165,11 +166,19 @@ class Base(_Base):
     _view = None
 
     def get(self, id):
-        entity = self._get_or_404(id=id)
+        # How can this code duplication be avoided?
+        try:
+            entity = self._get_or_404(id=id)
+        except werkzeug.exceptions.NotFound:
+            return dict(), http.HTTPStatus.NOT_FOUND
+
         return self.to_json(entity=entity)
 
     def put(self, id):
-        entity = self._get_or_404(id=id)
+        try:
+            entity = self._get_or_404(id=id)
+        except werkzeug.exceptions.NotFound:
+            return dict(), http.HTTPStatus.NOT_FOUND
 
         for attribute, value in flask.request.get_json().items():
             setattr(entity, attribute, value)

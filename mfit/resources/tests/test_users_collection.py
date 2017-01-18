@@ -21,6 +21,10 @@ class TestUsersCollection(Base):
     def endpoint_name(self):
         return 'users'
 
+    def test_get_nonexistent_resource(self):
+        response = requests.get(url=self.url + 'foo', headers=self.headers)
+        assert_equal(response.status_code, 404)
+
     def test_delete_nonexistent_resource(self):
         self_url = requests.post(url=self.url,
                                  headers=self.headers,
