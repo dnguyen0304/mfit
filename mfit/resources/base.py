@@ -10,6 +10,10 @@ from sqlalchemy import orm
 
 import mfit
 
+__all__ = ['Base',
+           'DBContext',
+           'DBContextFactory']
+
 
 class DBContext:
 
@@ -171,9 +175,11 @@ class Base(_Base):
 
         self._db_context.add(entity, updated_by=192)
         self._db_context.commit()
+
+        body = self._resource.to_json(entity=entity)
         self._db_context.close()
 
-        return self._resource.to_json(entity=entity)
+        return body
 
     def delete(self, id):
         try:

@@ -7,6 +7,8 @@ import flask
 import mfit
 from mfit import resources
 
+__all__ = ['BaseCollection']
+
 
 class BaseCollection(resources._Base):
 
@@ -30,7 +32,9 @@ class BaseCollection(resources._Base):
 
         self._db_context.add(entity, created_by=192)
         self._db_context.commit()
+
+        body = self._resource.to_json(entity=entity)
         self._db_context.close()
 
-        return self._resource.to_json(entity=entity)
+        return body
 
