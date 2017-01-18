@@ -45,7 +45,7 @@ class DBContext:
 
         Parameters
         ----------
-        entity : Variable
+        entity : models.Base subclass
             Domain model instance.
         created_by : datetime.datetime, optional
             Unique identifier for the user who created the entity. This
@@ -125,7 +125,7 @@ class DBContextFactory:
 
         Returns
         -------
-        mfit.resources.base.DBContext
+        resources.base.DBContext
 
         References
         ----------
@@ -195,7 +195,7 @@ class Base(_Base):
 
         Returns
         ------
-        models.Base Subclass
+        models.Base subclass
             Entity.
 
         Raises
