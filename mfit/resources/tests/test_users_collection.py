@@ -26,14 +26,6 @@ class TestUsersCollection(Base):
         assert_equal(response.status_code, 404)
 
     def test_delete_nonexistent_resource(self):
-        self_url = requests.post(url=self.url,
-                                 headers=self.headers,
-                                 json=self.user).json()['links']['self']
-        requests.delete(url=self_url, headers=self.headers, json=self.user)
-
-        response = requests.delete(url=self_url,
-                                   headers=self.headers,
-                                   json=self.user)
-
+        response = requests.delete(url=self.url + 'foo', headers=self.headers)
         assert_equal(response.status_code, 404)
 
