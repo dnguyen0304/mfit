@@ -40,11 +40,6 @@ class Base(metaclass=abc.ABCMeta):
 
     def test_is_discoverable(self):
         response = requests.get(url=self.root_url, headers=self.headers)
-        for endpoint in response.json()['data']:
-            if self.endpoint_name in endpoint.keys():
-                discovered_url = endpoint[self.endpoint_name]
-                break
-        else:
-            discovered_url = ''
+        discovered_url = response.json()['data'].get(self.endpoint_name, '')
         assert_equal(discovered_url, self.url)
 
