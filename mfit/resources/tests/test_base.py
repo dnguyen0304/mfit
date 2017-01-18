@@ -7,15 +7,17 @@ import sqlalchemy.exc
 from nose.tools import assert_true, raises
 
 import mfit
-from mfit import app
 from mfit import models
+from mfit.resources import base
 
 
 class TestDBContext:
 
     def __init__(self):
-        db_context_factory = app.DBContextFactory(
-            connection_string=mfit.configuration['repositories']['PostgreSQL']['connection_string'])
+        db_context_factory = base.DBContextFactory(
+            connection_string=mfit.configuration['repositories']
+                                                ['PostgreSQL']
+                                                ['connection_string'])
         self.db_context = db_context_factory.create()
 
         self.user = models.Users(
