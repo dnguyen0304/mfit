@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import collections
+import http
 
 import flask
 
@@ -36,5 +37,5 @@ class BaseCollection(resources._Base):
         body = self._resource.to_json(entity=entity)
         self._db_context.close()
 
-        return body
+        return body, http.HTTPStatus.CREATED
 
