@@ -31,7 +31,7 @@ class Base(metaclass=abc.ABCMeta):
         return url
 
     def test_get_status_code(self):
-        response = requests.get(url=self.url, headers=self.headers)
+        response = requests.head(url=self.url, headers=self.headers)
         assert_true(response.ok)
 
     def test_self_link(self):
