@@ -41,11 +41,11 @@ class TestUsersCollection(Base):
 
     def test_get_nonexistent_resource(self):
         response = requests.get(url=self.url + 'foo', headers=self.headers)
-        assert_equal(response.status_code, 404)
+        assert_equal(response.status_code, http.HTTPStatus.NOT_FOUND)
 
     def test_delete_nonexistent_resource(self):
         response = requests.delete(url=self.url + 'foo', headers=self.headers)
-        assert_equal(response.status_code, 404)
+        assert_equal(response.status_code, http.HTTPStatus.NOT_FOUND)
 
     def teardown(self):
         if self.self_url:
