@@ -11,7 +11,6 @@ from mfit import views
 
 class Routines(views.Base):
 
-    id = fields.String()
     sets = fields.Integer()
     value = fields.Integer()
     unit = fields.String(attribute='unit_name')

@@ -11,7 +11,6 @@ from mfit import views
 
 class AttemptsLogs(views.Base):
 
-    id = fields.String()
     sets_remaining = fields.Integer()
 
     relationships = fields.Dict()

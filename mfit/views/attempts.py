@@ -11,7 +11,6 @@ from mfit import views
 
 class Attempts(views.Base):
 
-    id = fields.String()
     starts_at = fields.DateTime()
     ends_at = fields.DateTime()
 

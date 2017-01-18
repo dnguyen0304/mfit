@@ -7,6 +7,5 @@ from mfit import views
 
 class HabitGroups(views.Base):
 
-    id = fields.String()
     name = fields.String()
 

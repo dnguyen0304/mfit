@@ -6,6 +6,8 @@ from marshmallow import fields
 
 class Base(marshmallow.Schema):
 
+    id = fields.String()
+
     created_at = fields.DateTime()
     created_by = fields.String()
     updated_at = fields.DateTime()
