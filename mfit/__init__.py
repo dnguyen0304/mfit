@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import os
+
 import flask
 import flask_restful
+import nose
 
 from mfit import resources
 from mfit import utilities
@@ -26,9 +29,32 @@ api.add_resource(resources.AttemptsLogs, '/v1/attempts/<int:attempts_id>/logs/<i
 api.add_resource(resources.AttemptsLogsCollection, '/v1/attempts/<int:attempts_id>/logs/')
 
 
-def main():
-    if configuration['environment'] == utilities.Environment.Production.name:
+def main(in_test_mode, test_runner_args):
+
+    """
+    References
+    ----------
+    See the Stack Overflow answer for more details [1].
+
+    .. [1] dbw, "Passing options to nose in a Python test script",
+       http://stackoverflow.com/a/13888865
+
+    See Also
+    --------
+    mfit.app
+    """
+
+    if in_test_mode:
+        package_directory = os.path.dirname(os.path.abspath(__file__))
+        test_runner_args.insert(0, package_directory)
+        # While both nose.main() and nose.run() are aliases for
+        # nose.TestProgram(), nose.main() exists only for backward
+        # compatibility.
+        nose.run(argv=test_runner_args)
+
+    elif configuration['environment'] == utilities.Environment.Production.name:
         _app.run()
+
     else:
         _app.run(debug=True)
 
