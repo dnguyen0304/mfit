@@ -124,7 +124,9 @@ Python
 ------
 ### General
 - Import statements **should** be sorted to enforce import order.
+- Packages **must** have a `__all__` index in `__init__.py`.
 - `__all__` indices **should** be sorted alphabetically.
+- Modules **could** have a `__all__` index.
 
 ### Models
 - New models **should** be added to the package index (i.e. `__init__.py`).
