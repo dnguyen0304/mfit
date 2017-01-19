@@ -55,7 +55,9 @@ class Base(RootBase):
 
     def test_is_discoverable(self):
         response = requests.get(url=self.root_url, headers=self.headers)
-        discovered_url = response.json()['data'].get(self.endpoint_name, '')
+        discovered_url = response.json()['data']['subresources'].get(
+            self.endpoint_name,
+            '')
         assert_equal(discovered_url, self.url)
 
     def test_get_id_attribute_type(self):
