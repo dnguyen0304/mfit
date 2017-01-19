@@ -5,6 +5,8 @@ from sqlalchemy.orm import relationship
 
 from mfit import models
 
+__all__ = ['Attempts']
+
 
 class Attempts(models.Base):
 

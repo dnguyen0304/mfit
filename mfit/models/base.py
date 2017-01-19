@@ -3,6 +3,8 @@
 from sqlalchemy import Column
 from sqlalchemy.ext.declarative import as_declarative
 
+__all__ = ['Base']
+
 
 @as_declarative()
 class Base:

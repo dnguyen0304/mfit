@@ -4,6 +4,8 @@ from sqlalchemy import Column, Integer
 
 from mfit import models
 
+__all__ = ['RoutinesUnits']
+
 
 class RoutinesUnits(models.Base):
 
