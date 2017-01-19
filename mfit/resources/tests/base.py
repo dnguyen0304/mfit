@@ -78,6 +78,14 @@ class Base(RootBase):
 
         assert_equal(response.status_code, http.HTTPStatus.CREATED)
 
+    def test_post_returns_location_header(self):
+        response = requests.post(url=self.url,
+                                 headers=self.headers,
+                                 json=self.data)
+        self.self_url = response.json()['links']['self']
+
+        assert_equal(response.headers['Location'], self.self_url)
+
     def test_delete_nonexistent_resource(self):
         response = requests.delete(url=self.url + 'foo', headers=self.headers)
         assert_equal(response.status_code, http.HTTPStatus.NOT_FOUND)

@@ -35,7 +35,11 @@ class BaseCollection(resources._Base):
         self._db_context.commit()
 
         body = self._resource.to_json(entity=entity)
+        headers = {
+            'Location': body['links']['self']
+        }
+
         self._db_context.close()
 
-        return body, http.HTTPStatus.CREATED
+        return body, http.HTTPStatus.CREATED, headers
 
