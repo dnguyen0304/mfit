@@ -2,7 +2,7 @@
 
 import collections
 
-from mfit import app
+import mfit
 from mfit import models
 from mfit import resources
 
@@ -32,9 +32,9 @@ class AttemptsLogsCollection(resources.BaseCollection):
 
     @classmethod
     def get_self_url(cls, entity):
-        return app.api.url_for(cls._resource_collection,
-                               attempts_id=entity.id,
-                               _external=True)
+        return mfit.api.url_for(cls._resource_collection,
+                                attempts_id=entity.id,
+                                _external=True)
 
 
 AttemptsLogsCollection._resource_collection = AttemptsLogsCollection
