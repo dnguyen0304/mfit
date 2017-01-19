@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import Column, Integer
+from sqlalchemy import Column
 from sqlalchemy.orm import relationship
 
 from mfit import models
@@ -12,7 +12,6 @@ class HabitGroups(models.Base):
 
     __tablename__ = 'habit_groups'
 
-    id = Column(Integer, primary_key=True)
     name = Column()
 
     users = relationship('Attempts', back_populates='habit_group')

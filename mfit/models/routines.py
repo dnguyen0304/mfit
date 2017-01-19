@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import Column, ForeignKey, Integer
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relationship
 
 from mfit import models
@@ -12,7 +12,6 @@ class Routines(models.Base):
 
     __tablename__ = 'routines'
 
-    id = Column(Integer, primary_key=True)
     habit_groups_id = Column(ForeignKey('habit_groups.id'))
     habits_id = Column(ForeignKey('habits.id'))
     # TODO (duyn): Should this field name be singular?
