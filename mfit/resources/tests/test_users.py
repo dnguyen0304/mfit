@@ -4,10 +4,10 @@ import uuid
 
 from mfit.resources.tests import Base
 
-__all__ = ['TestUsersCollection']
+__all__ = ['TestUsers']
 
 
-class TestUsersCollection(Base):
+class TestUsers(Base):
 
     @property
     def endpoint_name(self):
