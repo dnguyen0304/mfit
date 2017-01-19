@@ -1,17 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from nose.tools import nottest
+from mfit.resources.tests import RootBase
 
-from mfit.resources.tests import Base
+__all__ = ['TestRoot']
 
 
-class TestRoot(Base):
+class TestRoot(RootBase):
 
     @property
     def endpoint_name(self):
         return 'root'
-
-    @nottest
-    def test_is_discoverable(self):
-        pass
 
