@@ -3,6 +3,8 @@
 import marshmallow
 from marshmallow import fields
 
+__all__ = ['Base']
+
 
 class Base(marshmallow.Schema):
 

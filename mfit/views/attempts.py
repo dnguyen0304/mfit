@@ -8,6 +8,8 @@ from marshmallow import fields
 from mfit import resources
 from mfit import views
 
+__all__ = ['Attempts']
+
 
 class Attempts(views.Base):
 

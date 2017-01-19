@@ -4,6 +4,8 @@ from marshmallow import fields
 
 from mfit import views
 
+__all__ = ['Users']
+
 
 class Users(views.Base):
 
