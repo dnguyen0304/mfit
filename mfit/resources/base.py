@@ -232,16 +232,16 @@ class Base(_Base):
             flask_restful.abort(404)
 
     @classmethod
-    def get_self_link(cls, entity):
+    def get_self_url(cls, entity):
         return mfit.api.url_for(cls._resource, id=entity.id, _external=True)
 
     @classmethod
     def to_json(cls, entity):
         data = cls._view().dump(entity).data
 
-        links = {
-            'self': cls.get_self_link(entity=entity)
+        urls = {
+            'self': cls.get_self_url(entity=entity)
         }
 
-        return collections.OrderedDict([('data', data), ('links', links)])
+        return collections.OrderedDict([('data', data), ('urls', urls)])
 

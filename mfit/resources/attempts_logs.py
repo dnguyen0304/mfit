@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from mfit import app
+import mfit
 from mfit import models
 from mfit import resources
 from mfit import views
@@ -21,11 +21,11 @@ class AttemptsLogs(resources.Base):
         return super().get(id=id)
 
     @classmethod
-    def get_self_link(cls, entity):
-        return app.api.url_for(cls._resource,
-                               attempts_id=entity.attempts_id,
-                               id=entity.id,
-                               _external=True)
+    def get_self_url(cls, entity):
+        return mfit.api.url_for(cls._resource,
+                                attempts_id=entity.attempts_id,
+                                id=entity.id,
+                                _external=True)
 
 
 AttemptsLogs._resource = AttemptsLogs

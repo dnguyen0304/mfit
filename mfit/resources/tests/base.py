@@ -39,7 +39,7 @@ class RootBase(metaclass=abc.ABCMeta):
 
     def test_self_url(self):
         response = requests.get(url=self.url, headers=self.headers)
-        assert_equal(self.url, response.json()['links']['self'])
+        assert_equal(self.url, response.json()['urls']['self'])
 
 
 class Base(RootBase):
@@ -55,13 +55,15 @@ class Base(RootBase):
 
     def test_is_discoverable(self):
         response = requests.get(url=self.root_url, headers=self.headers)
-        discovered_url = response.json()['data'].get(self.endpoint_name, '')
+        discovered_url = response.json()['data']['subresources'].get(
+            self.endpoint_name,
+            '')
         assert_equal(discovered_url, self.url)
 
     def test_get_id_attribute_type(self):
         self.self_url = requests.post(url=self.url,
                                       headers=self.headers,
-                                      json=self.data).json()['links']['self']
+                                      json=self.data).json()['urls']['self']
         response = requests.get(url=self.self_url, headers=self.headers)
 
         assert_is_instance(response.json()['data']['id'], str)
@@ -74,7 +76,7 @@ class Base(RootBase):
         response = requests.post(url=self.url,
                                  headers=self.headers,
                                  json=self.data)
-        self.self_url = response.json()['links']['self']
+        self.self_url = response.json()['urls']['self']
 
         assert_equal(response.status_code, http.HTTPStatus.CREATED)
 
@@ -82,7 +84,7 @@ class Base(RootBase):
         response = requests.post(url=self.url,
                                  headers=self.headers,
                                  json=self.data)
-        self.self_url = response.json()['links']['self']
+        self.self_url = response.json()['urls']['self']
 
         assert_equal(response.headers['Location'], self.self_url)
 

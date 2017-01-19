@@ -13,19 +13,18 @@ __all__ = ['Attempts']
 
 class Attempts(views.Base):
 
+    habit_group = fields.Nested(views.HabitGroups)
+    user = fields.Nested(views.Users)
+
     starts_at = fields.DateTime()
     ends_at = fields.DateTime()
 
-    relationships = fields.Dict()
+    subresources = fields.Dict()
 
     @marshmallow.pre_dump
     def preprocess_relationships(self, attempt):
-        attempt.relationships = collections.OrderedDict()
-        attempt.relationships['user'] = resources.Users.get_self_link(
-            entity=attempt.user)
-        attempt.relationships['habit_group'] = resources.HabitGroups.get_self_link(
-            entity=attempt.habit_group)
-        attempt.relationships['logs'] = resources.AttemptsLogsCollection.get_self_link(
+        attempt.subresources = collections.OrderedDict()
+        attempt.subresources['logs'] = resources.AttemptsLogsCollection.get_self_url(
             entity=attempt)
         return attempt
 
