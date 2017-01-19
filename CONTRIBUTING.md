@@ -2,6 +2,18 @@ Introduction
 ------------
 This document adheres to the specifications outlined in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
 
+Source Control
+--------------
+### Commit Messages
+- Issue IDs **must** be included.
+```
+# YES
+git commit --message "PROJECT-1: foo"
+
+# No
+git commit --message "foo"
+```
+
 Database
 --------
 ### Configuration
