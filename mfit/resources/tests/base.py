@@ -58,7 +58,7 @@ class Base(RootBase):
         discovered_url = response.json()['data'].get(self.endpoint_name, '')
         assert_equal(discovered_url, self.url)
 
-    def test_get_id_type(self):
+    def test_get_id_attribute_type(self):
         self.self_url = requests.post(url=self.url,
                                       headers=self.headers,
                                       json=self.data).json()['links']['self']
