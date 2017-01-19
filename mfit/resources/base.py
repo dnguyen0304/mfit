@@ -2,13 +2,19 @@
 
 import collections
 import datetime
+import http
 
 import flask
 import flask_restful
 import sqlalchemy
+import werkzeug.exceptions
 from sqlalchemy import orm
 
 import mfit
+
+__all__ = ['Base',
+           'DBContext',
+           'DBContextFactory']
 
 
 class DBContext:
@@ -160,30 +166,43 @@ class Base(_Base):
     _view = None
 
     def get(self, id):
-        entity = self._get_or_404(id=id)
+        # How can this code duplication be avoided?
+        try:
+            entity = self._get_or_404(id=id)
+        except werkzeug.exceptions.NotFound:
+            return dict(), http.HTTPStatus.NOT_FOUND
+
         return self.to_json(entity=entity)
 
     def put(self, id):
-        entity = self._get_or_404(id=id)
+        try:
+            entity = self._get_or_404(id=id)
+        except werkzeug.exceptions.NotFound:
+            return dict(), http.HTTPStatus.NOT_FOUND
 
         for attribute, value in flask.request.get_json().items():
             setattr(entity, attribute, value)
 
         self._db_context.add(entity, updated_by=192)
         self._db_context.commit()
+
+        body = self._resource.to_json(entity=entity)
         self._db_context.close()
 
-        return self._resource.to_json(entity=entity)
+        return body
 
     def delete(self, id):
-        try:
-            self._db_context.query(self._model) \
-                            .filter_by(id=id) \
-                            .delete(synchronize_session=False)
-        except (orm.exc.NoResultFound, orm.exc.MultipleResultsFound):
-            flask_restful.abort(404)
+        matched_entities_count = (
+            self._db_context.query(self._model)
+                            .filter_by(id=id)
+                            .delete(synchronize_session=False))
+        if matched_entities_count == 0:
+            return dict(), http.HTTPStatus.NOT_FOUND
+
         self._db_context.commit()
         self._db_context.close()
+
+        return dict(), http.HTTPStatus.NO_CONTENT
 
     def _get_or_404(self, id):
 

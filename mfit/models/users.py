@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import Column, Integer
+from sqlalchemy import Column
 from sqlalchemy.orm import relationship
 
 from mfit import models
+
+__all__ = ['Users']
 
 
 class Users(models.Base):
 
     __tablename__ = 'users'
 
-    # When the primary key is named "id", not specifying the data type
-    # causes SQLAlchemy to raise warnings, FlushErrors, and
-    # CompileErrors.
-    id = Column(Integer, primary_key=True)
     email_address = Column()
     first_name = Column()
     last_name = Column()

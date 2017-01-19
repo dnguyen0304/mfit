@@ -8,10 +8,11 @@ from marshmallow import fields
 from mfit import resources
 from mfit import views
 
+__all__ = ['AttemptsLogs']
+
 
 class AttemptsLogs(views.Base):
 
-    id = fields.String()
     sets_remaining = fields.Integer()
 
     relationships = fields.Dict()

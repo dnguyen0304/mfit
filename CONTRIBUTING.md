@@ -2,6 +2,18 @@ Introduction
 ------------
 This document adheres to the specifications outlined in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
 
+Source Control
+--------------
+### Commit Messages
+- Issue IDs **must** be included.
+```
+# YES
+git commit --message "PROJECT-1: foo"
+
+# No
+git commit --message "foo"
+```
+
 Database
 --------
 ### Configuration
@@ -127,3 +139,22 @@ Python
     - For singleton resources, create a corresponding collection resource.
     - For collection resources, in the root resource's `relationships` index (`resources/root.py`), add a corresponding reference.
     - For sub-resources, in the parent's view's `relationships` object, add a corresponding reference.
+
+### Endpoints
+- Resource `id` URL variables **must** be named `id`.
+```
+# YES
+/foo/<int:id>
+
+# No
+/foo/<int:foo_id>
+```
+- For sub-resources, parent resource `id` URL variables **must** be named `<resource_name>_id`.
+```
+# YES
+/foo/<int:foo_id>/bar/<int:id>
+
+# No
+/foo/<int:id>
+/foo/<int:id>/bar/<int:bar_id>
+```

@@ -4,9 +4,10 @@ from marshmallow import fields
 
 from mfit import views
 
+__all__ = ['Habits']
+
 
 class Habits(views.Base):
 
-    id = fields.String()
     name = fields.String()
 

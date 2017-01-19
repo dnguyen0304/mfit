@@ -10,6 +10,8 @@ import mfit
 from mfit import models
 from mfit.resources import base
 
+__all__ = ['TestDBContext']
+
 
 class TestDBContext:
 

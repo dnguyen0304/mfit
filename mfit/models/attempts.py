@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import Column, ForeignKey, Integer
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relationship
 
 from mfit import models
+
+__all__ = ['Attempts']
 
 
 class Attempts(models.Base):
 
     __tablename__ = 'attempts'
 
-    id = Column(Integer, primary_key=True)
     users_id = Column(ForeignKey('users.id'))
     habit_groups_id = Column(ForeignKey('habit_groups.id'))
     # Should these attributes use past tense verbs for consistency?

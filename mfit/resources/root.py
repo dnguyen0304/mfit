@@ -5,6 +5,8 @@ import collections
 import mfit
 from mfit import resources
 
+__all__ = ['Root']
+
 
 class Root(resources._Base):
 

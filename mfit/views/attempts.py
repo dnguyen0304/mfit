@@ -8,10 +8,11 @@ from marshmallow import fields
 from mfit import resources
 from mfit import views
 
+__all__ = ['Attempts']
+
 
 class Attempts(views.Base):
 
-    id = fields.String()
     starts_at = fields.DateTime()
     ends_at = fields.DateTime()
 

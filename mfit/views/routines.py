@@ -8,10 +8,11 @@ from marshmallow import fields
 from mfit import resources
 from mfit import views
 
+__all__ = ['Routines']
+
 
 class Routines(views.Base):
 
-    id = fields.String()
     sets = fields.Integer()
     value = fields.Integer()
     unit = fields.String(attribute='unit_name')

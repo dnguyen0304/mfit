@@ -16,6 +16,8 @@ import argparse
 
 import mfit
 
+__all__ = ['ArgumentParser', 'get_argument_parser']
+
 
 class ArgumentParser(argparse.ArgumentParser):
 

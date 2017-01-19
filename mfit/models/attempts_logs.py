@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import Column, ForeignKey, Integer
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relationship
 
 from mfit import models
+
+__all__ = ['AttemptsLogs']
 
 
 class AttemptsLogs(models.Base):
 
     __tablename__ = 'attempts_logs'
 
-    id = Column(Integer, primary_key=True)
     attempts_id = Column(ForeignKey('attempts.id'))
     habits_id = Column(ForeignKey('habits.id'))
     sets_remaining = Column()

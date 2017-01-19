@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import Column, Integer
+from sqlalchemy import Column
 
 from mfit import models
+
+__all__ = ['RoutinesUnits']
 
 
 class RoutinesUnits(models.Base):
 
     __tablename__ = 'routines_units'
 
-    id = Column(Integer, primary_key=True)
     name = Column()
 
     def __init__(self, name):

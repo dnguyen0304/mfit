@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import Column, Integer
+from sqlalchemy import Column
 from sqlalchemy.orm import relationship
 
 from mfit import models
+
+__all__ = ['Habits']
 
 
 class Habits(models.Base):
 
     __tablename__ = 'habits'
 
-    id = Column(Integer, primary_key=True)
     name = Column()
 
     habit_groups = relationship('Routines', back_populates='habit')

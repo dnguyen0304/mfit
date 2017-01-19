@@ -10,6 +10,13 @@ from nose.tools import (assert_equal,
 
 from mfit import utilities
 
+__all__ = ['do_teardown',
+           'test_get_configuration',
+           'test_get_configuration_invalid_environment',
+           'test_get_configuration_invalid_schema',
+           'test_get_configuration_missing_environment',
+           'test_get_configuration_standardize_project_name']
+
 
 def do_teardown():
 

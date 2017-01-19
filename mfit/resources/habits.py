@@ -4,6 +4,8 @@ from mfit import models
 from mfit import resources
 from mfit import views
 
+__all__ = ['Habits']
+
 
 class Habits(resources.Base):
 

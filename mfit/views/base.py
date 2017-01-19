@@ -3,8 +3,12 @@
 import marshmallow
 from marshmallow import fields
 
+__all__ = ['Base']
+
 
 class Base(marshmallow.Schema):
+
+    id = fields.String()
 
     created_at = fields.DateTime()
     created_by = fields.String()

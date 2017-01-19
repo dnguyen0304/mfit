@@ -9,6 +9,8 @@ import nose
 from mfit import resources
 from mfit import utilities
 
+__all__ = ['api', 'configuration', 'main']
+
 configuration = utilities.get_configuration(project_name=__name__, depth=1)
 
 _app = flask.Flask(__name__)
@@ -57,7 +59,4 @@ def main(in_test_mode, test_runner_args):
 
     else:
         _app.run(debug=True)
-
-
-__all__ = ['api', 'configuration', 'main']
 
