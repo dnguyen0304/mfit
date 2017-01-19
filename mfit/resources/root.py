@@ -19,9 +19,9 @@ class Root(resources._Base):
             'users': mfit.api.url_for(resources.UsersCollection, _external=True)
         }
 
-        links = {
+        urls = {
             'self': mfit.api.url_for(Root, _external=True)
         }
 
-        return collections.OrderedDict([('data', data), ('links', links)])
+        return collections.OrderedDict([('data', data), ('urls', urls)])
 

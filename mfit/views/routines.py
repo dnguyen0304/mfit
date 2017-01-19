@@ -28,9 +28,9 @@ class Routines(views.Base):
     @marshmallow.pre_dump
     def preprocess_relationships(self, routine):
         routine.relationships = collections.OrderedDict()
-        routine.relationships['habit_group'] = resources.HabitGroups.get_self_link(
+        routine.relationships['habit_group'] = resources.HabitGroups.get_self_url(
             entity=routine.habit_group)
-        routine.relationships['habit'] = resources.Habits.get_self_link(
+        routine.relationships['habit'] = resources.Habits.get_self_url(
             entity=routine.habit)
         return routine
 

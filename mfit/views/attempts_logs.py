@@ -20,7 +20,7 @@ class AttemptsLogs(views.Base):
     @marshmallow.pre_dump
     def preprocess_relationships(self, attempt_log):
         attempt_log.relationships = collections.OrderedDict()
-        attempt_log.relationships['habit'] = resources.Habits.get_self_link(
+        attempt_log.relationships['habit'] = resources.Habits.get_self_url(
             entity=attempt_log.habit)
         return attempt_log
 

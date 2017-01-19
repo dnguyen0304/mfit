@@ -18,15 +18,15 @@ class BaseCollection(resources._Base):
     _resource_collection = None
 
     def get(self):
-        data = [self._resource.get_self_link(entity=entity)
+        data = [self._resource.get_self_url(entity=entity)
                 for entity
                 in self._db_context.query(self._model).all()]
 
-        links = {
+        urls = {
             'self': mfit.api.url_for(self._resource_collection, _external=True)
         }
 
-        return collections.OrderedDict([('data', data), ('links', links)])
+        return collections.OrderedDict([('data', data), ('urls', urls)])
 
     def post(self):
         entity = self._model(**flask.request.get_json())
@@ -36,7 +36,7 @@ class BaseCollection(resources._Base):
 
         body = self._resource.to_json(entity=entity)
         headers = {
-            'Location': body['links']['self']
+            'Location': body['urls']['self']
         }
 
         self._db_context.close()

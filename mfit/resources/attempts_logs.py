@@ -21,7 +21,7 @@ class AttemptsLogs(resources.Base):
         return super().get(id=id)
 
     @classmethod
-    def get_self_link(cls, entity):
+    def get_self_url(cls, entity):
         return app.api.url_for(cls._resource,
                                attempts_id=entity.attempts_id,
                                id=entity.id,
