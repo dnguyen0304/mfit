@@ -3,6 +3,8 @@
 from mfit import models
 from mfit import resources
 
+__all__ = ['HabitGroupsCollection']
+
 
 class HabitGroupsCollection(resources.BaseCollection):
 

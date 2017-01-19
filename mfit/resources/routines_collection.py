@@ -3,6 +3,8 @@
 from mfit import models
 from mfit import resources
 
+__all__ = ['RoutinesCollection']
+
 
 class RoutinesCollection(resources.BaseCollection):
 
