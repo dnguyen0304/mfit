@@ -10,6 +10,8 @@ from nose.tools import (assert_false,
 
 from mfit import app
 
+__all__ = ['TestArgumentParser']
+
 
 class TestArgumentParser:
 
