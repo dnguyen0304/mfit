@@ -40,11 +40,11 @@ class RootBase(metaclass=abc.ABCMeta):
         response = requests.head(url=self.url, headers=self.headers)
         assert_true(response.ok)
 
-    def test_get_body_has_top_level_data_attribute(self):
+    def test_get_body_has_data(self):
         response = requests.get(url=self.url, headers=self.headers)
         assert_in('data', response.json())
 
-    def test_get_body_has_top_level_urls_attribute(self):
+    def test_get_body_has_urls(self):
         response = requests.get(url=self.url, headers=self.headers)
         assert_in('urls', response.json())
 
@@ -98,6 +98,22 @@ class Base(RootBase):
         self.self_url = response.json()['urls']['self']
 
         assert_equal(response.headers['Location'], self.self_url)
+
+    def test_post_body_has_data_not_null(self):
+        response = requests.post(url=self.url,
+                                 headers=self.headers,
+                                 json=self.data)
+        self.self_url = response.json()['urls']['self']
+
+        assert_true(response.json()['data'])
+
+    def test_post_body_has_self_url(self):
+        response = requests.post(url=self.url,
+                                 headers=self.headers,
+                                 json=self.data)
+        self.self_url = response.json()['urls']['self']
+
+        assert_true(response.json()['urls']['self'])
 
     def test_delete_nonexistent_resource_returns_404_status_code(self):
         response = requests.delete(url=self.url + 'foo', headers=self.headers)
