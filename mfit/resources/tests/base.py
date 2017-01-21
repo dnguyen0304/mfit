@@ -4,7 +4,10 @@ import abc
 import http
 
 import requests
-from nose.tools import assert_equal, assert_is_instance, assert_true
+from nose.tools import (assert_equal,
+                        assert_in,
+                        assert_is_instance,
+                        assert_true)
 
 __all__ = ['Base', 'RootBase']
 
@@ -33,11 +36,19 @@ class RootBase(metaclass=abc.ABCMeta):
             url += '/'
         return url
 
-    def test_get_status_code(self):
+    def test_get_collection_returns_200_status_code(self):
         response = requests.head(url=self.url, headers=self.headers)
         assert_true(response.ok)
 
-    def test_self_url(self):
+    def test_get_body_has_data(self):
+        response = requests.get(url=self.url, headers=self.headers)
+        assert_in('data', response.json())
+
+    def test_get_body_has_urls(self):
+        response = requests.get(url=self.url, headers=self.headers)
+        assert_in('urls', response.json())
+
+    def test_get_body_has_self_url(self):
         response = requests.get(url=self.url, headers=self.headers)
         assert_equal(self.url, response.json()['urls']['self'])
 
@@ -53,14 +64,14 @@ class Base(RootBase):
     def data(self):
         pass
 
-    def test_is_discoverable(self):
+    def test_get_subresources_are_discoverable(self):
         response = requests.get(url=self.root_url, headers=self.headers)
         discovered_url = response.json()['data']['subresources'].get(
             self.endpoint_name,
             '')
         assert_equal(discovered_url, self.url)
 
-    def test_get_id_attribute_type(self):
+    def test_get_id_attribute_is_of_type_string(self):
         self.self_url = requests.post(url=self.url,
                                       headers=self.headers,
                                       json=self.data).json()['urls']['self']
@@ -68,11 +79,11 @@ class Base(RootBase):
 
         assert_is_instance(response.json()['data']['id'], str)
 
-    def test_get_nonexistent_resource(self):
+    def test_get_nonexistent_resource_returns_404_status_code(self):
         response = requests.get(url=self.url + 'foo', headers=self.headers)
         assert_equal(response.status_code, http.HTTPStatus.NOT_FOUND)
 
-    def test_post(self):
+    def test_post_returns_201_status_code(self):
         response = requests.post(url=self.url,
                                  headers=self.headers,
                                  json=self.data)
@@ -88,7 +99,23 @@ class Base(RootBase):
 
         assert_equal(response.headers['Location'], self.self_url)
 
-    def test_delete_nonexistent_resource(self):
+    def test_post_body_has_data_not_null(self):
+        response = requests.post(url=self.url,
+                                 headers=self.headers,
+                                 json=self.data)
+        self.self_url = response.json()['urls']['self']
+
+        assert_true(response.json()['data'])
+
+    def test_post_body_has_self_url(self):
+        response = requests.post(url=self.url,
+                                 headers=self.headers,
+                                 json=self.data)
+        self.self_url = response.json()['urls']['self']
+
+        assert_true(response.json()['urls']['self'])
+
+    def test_delete_nonexistent_resource_returns_404_status_code(self):
         response = requests.delete(url=self.url + 'foo', headers=self.headers)
         assert_equal(response.status_code, http.HTTPStatus.NOT_FOUND)
 
