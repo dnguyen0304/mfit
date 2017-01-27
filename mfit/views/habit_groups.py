@@ -2,12 +2,12 @@
 
 from marshmallow import fields
 
-from mfit import views
+from . import Base
 
 __all__ = ['HabitGroups']
 
 
-class HabitGroups(views.Base):
+class HabitGroups(Base):
 
     name = fields.String()
 

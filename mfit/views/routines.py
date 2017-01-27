@@ -3,15 +3,15 @@
 import marshmallow
 from marshmallow import fields
 
-from mfit import views
+from . import Base, HabitGroups, Habits
 
 __all__ = ['Routines']
 
 
-class Routines(views.Base):
+class Routines(Base):
 
-    habit = fields.Nested(views.Habits)
-    habit_group = fields.Nested(views.HabitGroups)
+    habit = fields.Nested(Habits)
+    habit_group = fields.Nested(HabitGroups)
 
     sets = fields.Integer()
     value = fields.Integer()

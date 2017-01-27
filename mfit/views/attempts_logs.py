@@ -2,14 +2,14 @@
 
 from marshmallow import fields
 
-from mfit import views
+from . import Base, Habits
 
 __all__ = ['AttemptsLogs']
 
 
-class AttemptsLogs(views.Base):
+class AttemptsLogs(Base):
 
-    habit = fields.Nested(views.Habits)
+    habit = fields.Nested(Habits)
 
     sets_remaining = fields.Integer()
 

@@ -5,16 +5,16 @@ import collections
 import marshmallow
 from marshmallow import fields
 
+from . import Base, HabitGroups, Users
 from mfit import resources
-from mfit import views
 
 __all__ = ['Attempts']
 
 
-class Attempts(views.Base):
+class Attempts(Base):
 
-    habit_group = fields.Nested(views.HabitGroups)
-    user = fields.Nested(views.Users)
+    habit_group = fields.Nested(HabitGroups)
+    user = fields.Nested(Users)
 
     starts_at = fields.DateTime()
     ends_at = fields.DateTime()
