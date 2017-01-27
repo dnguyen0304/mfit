@@ -3,12 +3,12 @@
 from sqlalchemy import Column
 from sqlalchemy.orm import relationship
 
-from mfit import models
+from . import Base
 
 __all__ = ['HabitGroups']
 
 
-class HabitGroups(models.Base):
+class HabitGroups(Base):
 
     __tablename__ = 'habit_groups'
 

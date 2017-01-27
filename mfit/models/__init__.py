@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from mfit.models.base import Base
-from mfit.models.habit_groups import HabitGroups
-from mfit.models.habits import Habits
-from mfit.models.routines_units import RoutinesUnits
-from mfit.models.users import Users
-from mfit.models.attempts import Attempts
-from mfit.models.routines import Routines
-from mfit.models.attempts_logs import AttemptsLogs
+from .base import Base
+from .habit_groups import HabitGroups
+from .habits import Habits
+from .routines_units import RoutinesUnits
+from .users import Users
+from .attempts import Attempts
+from .routines import Routines
+from .attempts_logs import AttemptsLogs
 
 __all__ = ['Attempts',
            'AttemptsLogs',

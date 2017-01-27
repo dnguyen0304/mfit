@@ -3,12 +3,12 @@
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relationship
 
-from mfit import models
+from . import Base
 
 __all__ = ['Routines']
 
 
-class Routines(models.Base):
+class Routines(Base):
 
     __tablename__ = 'routines'
 

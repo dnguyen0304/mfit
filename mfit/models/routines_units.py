@@ -2,12 +2,12 @@
 
 from sqlalchemy import Column
 
-from mfit import models
+from . import Base
 
 __all__ = ['RoutinesUnits']
 
 
-class RoutinesUnits(models.Base):
+class RoutinesUnits(Base):
 
     __tablename__ = 'routines_units'
 
