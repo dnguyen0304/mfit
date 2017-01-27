@@ -6,7 +6,6 @@ import marshmallow
 from marshmallow import fields
 
 from . import Base, HabitGroups, Users
-from mfit import resources
 
 __all__ = ['Attempts']
 
@@ -24,7 +23,7 @@ class Attempts(Base):
     @marshmallow.pre_dump
     def preprocess_relationships(self, attempt):
         attempt.subresources = collections.OrderedDict()
-        attempt.subresources['logs'] = resources.AttemptsLogsCollection.get_self_url(
-            entity=attempt)
+        # TODO (duyn): Return the sub-resource URL.
+        attempt.subresources['logs'] = 'Not Currently Supported'
         return attempt
 
