@@ -8,7 +8,7 @@ This is the entry point for managing the API. This package is designed
 to be started as a service rather than called as an external library.
 To start the service, from the terminal run
 
-    python mfit/app.py
+    python mfit/application.py
 
 """
 
