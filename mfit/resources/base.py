@@ -2,7 +2,12 @@
 
 import collections
 import datetime
-import http
+import sys
+
+if sys.version_info == (2, 7):
+    import httplib as HttpStatusCode
+elif sys.version_info >= (3, 0):
+    import http.client as HttpStatusCode
 
 import flask
 import flask_restful
@@ -170,7 +175,7 @@ class Base(_Base):
         try:
             entity = self._get_or_404(id=id)
         except werkzeug.exceptions.NotFound:
-            return dict(), http.HTTPStatus.NOT_FOUND
+            return dict(), HttpStatusCode.NOT_FOUND
 
         return self.to_json(entity=entity)
 
@@ -178,7 +183,7 @@ class Base(_Base):
         try:
             entity = self._get_or_404(id=id)
         except werkzeug.exceptions.NotFound:
-            return dict(), http.HTTPStatus.NOT_FOUND
+            return dict(), HttpStatusCode.NOT_FOUND
 
         for attribute, value in flask.request.get_json().items():
             setattr(entity, attribute, value)
@@ -197,12 +202,12 @@ class Base(_Base):
                             .filter_by(id=id)
                             .delete(synchronize_session=False))
         if matched_entities_count == 0:
-            return dict(), http.HTTPStatus.NOT_FOUND
+            return dict(), HttpStatusCode.NOT_FOUND
 
         self._db_context.commit()
         self._db_context.close()
 
-        return dict(), http.HTTPStatus.NO_CONTENT
+        return dict(), HttpStatusCode.NO_CONTENT
 
     def _get_or_404(self, id):
 
