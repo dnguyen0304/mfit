@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
+from . import BaseCollection, HabitGroups
 from mfit import models
-from mfit import resources
 
 __all__ = ['HabitGroupsCollection']
 
 
-class HabitGroupsCollection(resources.BaseCollection):
+class HabitGroupsCollection(BaseCollection):
 
     _model = models.HabitGroups
-    _resource = resources.HabitGroups
+    _resource = HabitGroups
 
 
 HabitGroupsCollection._resource_collection = HabitGroupsCollection

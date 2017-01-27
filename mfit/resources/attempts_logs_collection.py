@@ -3,14 +3,14 @@
 import collections
 
 import mfit
+from . import AttemptsLogs, BaseCollection
 from mfit import models
-from mfit import resources
 
 
-class AttemptsLogsCollection(resources.BaseCollection):
+class AttemptsLogsCollection(BaseCollection):
 
     _model = models.AttemptsLogs
-    _resource = resources.AttemptsLogs
+    _resource = AttemptsLogs
 
     def get(self, attempts_id):
         attempts_logs = self._db_context.query(self._model) \

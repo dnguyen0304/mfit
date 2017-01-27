@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
+from . import BaseCollection, Users
 from mfit import models
-from mfit import resources
 
 __all__ = ['UsersCollection']
 
 
-class UsersCollection(resources.BaseCollection):
+class UsersCollection(BaseCollection):
 
     _model = models.Users
-    _resource = resources.Users
+    _resource = Users
 
 
 UsersCollection._resource_collection = UsersCollection

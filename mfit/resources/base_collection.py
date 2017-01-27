@@ -6,12 +6,13 @@ import http
 import flask
 
 import mfit
-from mfit import resources
+from . import _Base
+
 
 __all__ = ['BaseCollection']
 
 
-class BaseCollection(resources._Base):
+class BaseCollection(_Base):
 
     _model = None
     _resource = None
