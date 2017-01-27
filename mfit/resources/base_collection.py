@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import collections
-import sys
-
-if sys.version_info == (2, 7):
-    import httplib as HTTPStatusCode
-elif sys.version_info >= (3, 0):
-    import http.client as HTTPStatusCode
+import http
 
 import flask
 
@@ -47,5 +42,5 @@ class BaseCollection(_Base):
 
         self._db_context.close()
 
-        return body, HttpStatusCode.CREATED, headers
+        return body, http.HTTPStatus.CREATED, headers
 

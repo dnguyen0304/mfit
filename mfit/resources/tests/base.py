@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import abc
-import sys
-
-if sys.version_info == (2, 7):
-    import httplib as HttpStatusCode
-elif sys.version_info >= (3, 0):
-    import http.client as HttpStatusCode
+import http
 
 import requests
 from nose.tools import (assert_equal,
@@ -86,7 +81,7 @@ class Base(RootBase):
 
     def test_get_nonexistent_resource_returns_404_status_code(self):
         response = requests.get(url=self.url + 'foo', headers=self.headers)
-        assert_equal(response.status_code, HttpStatusCode.NOT_FOUND)
+        assert_equal(response.status_code, http.HTTPStatus.NOT_FOUND)
 
     def test_post_returns_201_status_code(self):
         response = requests.post(url=self.url,
@@ -94,7 +89,7 @@ class Base(RootBase):
                                  json=self.data)
         self.self_url = response.json()['urls']['self']
 
-        assert_equal(response.status_code, HttpStatusCode.CREATED)
+        assert_equal(response.status_code, http.HTTPStatus.CREATED)
 
     def test_post_returns_location_header(self):
         response = requests.post(url=self.url,
@@ -122,7 +117,7 @@ class Base(RootBase):
 
     def test_delete_nonexistent_resource_returns_404_status_code(self):
         response = requests.delete(url=self.url + 'foo', headers=self.headers)
-        assert_equal(response.status_code, HttpStatusCode.NOT_FOUND)
+        assert_equal(response.status_code, http.HTTPStatus.NOT_FOUND)
 
     def teardown(self):
         if self.self_url:
