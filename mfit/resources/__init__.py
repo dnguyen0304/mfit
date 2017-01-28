@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
 
-from mfit.resources.base import _Base, Base
-from mfit.resources.base_collection import BaseCollection
-from mfit.resources.root import Root
-from mfit.resources.habit_groups import HabitGroups
-from mfit.resources.habit_groups_collection import HabitGroupsCollection
-from mfit.resources.habits import Habits
-from mfit.resources.habits_collection import HabitsCollection
-from mfit.resources.users import Users
-from mfit.resources.users_collection import UsersCollection
-from mfit.resources.attempts import Attempts
-from mfit.resources.attempts_collection import AttemptsCollection
-from mfit.resources.routines import Routines
-from mfit.resources.routines_collection import RoutinesCollection
-from mfit.resources.attempts_logs import AttemptsLogs
-from mfit.resources.attempts_logs_collection import AttemptsLogsCollection
+from .base import _Base, Base
+from .base_collection import BaseCollection
+from .habit_groups import HabitGroups
+from .habit_groups_collection import HabitGroupsCollection
+from .habits import Habits
+from .habits_collection import HabitsCollection
+from .users import Users
+from .users_collection import UsersCollection
+from .attempts import Attempts
+from .attempts_collection import AttemptsCollection
+from .routines import Routines
+from .routines_collection import RoutinesCollection
+from .attempts_logs import AttemptsLogs
+from .attempts_logs_collection import AttemptsLogsCollection
+from .root import Root
 
 __all__ = ['Attempts',
            'AttemptsCollection',

@@ -3,12 +3,12 @@
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relationship
 
-from mfit import models
+from . import Base
 
 __all__ = ['Attempts']
 
 
-class Attempts(models.Base):
+class Attempts(Base):
 
     __tablename__ = 'attempts'
 

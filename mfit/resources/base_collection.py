@@ -1,17 +1,23 @@
 # -*- coding: utf-8 -*-
 
 import collections
-import http
+import sys
+
+if sys.version_info == (2, 7):
+    import httplib as HttpStatusCode
+elif sys.version_info >= (3, 0):
+    import http.client as HttpStatusCode
 
 import flask
 
 import mfit
-from mfit import resources
+from . import _Base
+
 
 __all__ = ['BaseCollection']
 
 
-class BaseCollection(resources._Base):
+class BaseCollection(_Base):
 
     _model = None
     _resource = None
@@ -41,5 +47,5 @@ class BaseCollection(resources._Base):
 
         self._db_context.close()
 
-        return body, http.HTTPStatus.CREATED, headers
+        return body, HttpStatusCode.CREATED, headers
 

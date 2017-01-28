@@ -8,7 +8,7 @@ from nose.tools import (assert_false,
                         assert_true,
                         raises)
 
-from mfit import app
+from mfit import application
 
 __all__ = ['TestArgumentParser']
 
@@ -16,7 +16,7 @@ __all__ = ['TestArgumentParser']
 class TestArgumentParser:
 
     def __init__(self):
-        self.argument_parser = app.get_argument_parser()
+        self.argument_parser = application.get_argument_parser()
 
     def test_return_type(self):
         output = self.argument_parser.parse_args(args='')

@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
+from . import Base
 from mfit import models
-from mfit import resources
 from mfit import views
 
 __all__ = ['Routines']
 
 
-class Routines(resources.Base):
+class Routines(Base):
 
     _model = models.Routines
     _view = views.Routines

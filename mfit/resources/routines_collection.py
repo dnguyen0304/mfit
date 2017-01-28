@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
+from . import BaseCollection, Routines
 from mfit import models
-from mfit import resources
 
 __all__ = ['RoutinesCollection']
 
 
-class RoutinesCollection(resources.BaseCollection):
+class RoutinesCollection(BaseCollection):
 
     _model = models.Routines
-    _resource = resources.Routines
+    _resource = Routines
 
 
 RoutinesCollection._resource_collection = RoutinesCollection

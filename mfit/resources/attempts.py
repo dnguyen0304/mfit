@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
+from . import Base
 from mfit import models
-from mfit import resources
 from mfit import views
 
 
-class Attempts(resources.Base):
+class Attempts(Base):
 
     _model = models.Attempts
     _view = views.Attempts
