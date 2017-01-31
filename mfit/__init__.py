@@ -31,7 +31,7 @@ api.add_resource(resources.AttemptsLogs, '/v1/attempts/<int:attempts_id>/logs/<i
 api.add_resource(resources.AttemptsLogsCollection, '/v1/attempts/<int:attempts_id>/logs/')
 
 
-def main(in_test_mode, test_runner_args):
+def main(hostname, port, in_debug_mode, in_test_mode, test_runner_args):
 
     """
     References
@@ -53,10 +53,6 @@ def main(in_test_mode, test_runner_args):
         # nose.TestProgram(), nose.main() exists only for backward
         # compatibility.
         nose.run(argv=test_runner_args)
-
-    elif configuration['environment'] == utilities.Environment.Production.name:
-        app.run()
-
     else:
-        app.run(debug=True)
+        app.run(host=hostname, port=port, debug=in_debug_mode)
 
