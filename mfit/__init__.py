@@ -13,8 +13,8 @@ __all__ = ['api', 'configuration', 'main']
 
 configuration = utilities.get_configuration(application_name=__name__)
 
-_app = flask.Flask(__name__)
-api = flask_restful.Api(app=_app)
+app = flask.Flask(__name__)
+api = flask_restful.Api(app=app)
 
 api.add_resource(resources.Root, '/v1/')
 api.add_resource(resources.Users, '/v1/users/<int:id>')
@@ -55,8 +55,8 @@ def main(in_test_mode, test_runner_args):
         nose.run(argv=test_runner_args)
 
     elif configuration['environment'] == utilities.Environment.Production.name:
-        _app.run()
+        app.run()
 
     else:
-        _app.run(debug=True)
+        app.run(debug=True)
 
