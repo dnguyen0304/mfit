@@ -1,4 +1,4 @@
 include LICENSE.txt
 include README.md
-include project.config
+include application.config
 include requirements.txt

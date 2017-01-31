@@ -25,15 +25,15 @@ class Environment(AutomaticEnum):
 
 
 # TODO (duyn): Change this into a singleton.
-def get_configuration(project_name, depth, _configuration_file=None):
+def get_configuration(application_name, _configuration_file=None):
 
     """
-    Get the configuration file based on it's relative location.
+    Get the configuration file.
 
-    The project name is standardized. The convention is to use uppercase
-    without delimiters. The configuration file **must** be named
-    "project.config". Its contents **must** be formatted as JSON with the
-    top-level objects specifying the environment. For example:
+    The application name is standardized. The convention is to use
+    uppercase without delimiters. The configuration file's contents
+    **must** be formatted as JSON with the top-level objects specifying
+    the environment. For example:
 
     ```
     {
@@ -45,12 +45,8 @@ def get_configuration(project_name, depth, _configuration_file=None):
 
     Parameters
     ----------
-    project_name : str
-        Project name.
-    depth : int
-        Number of layers (i.e. sub-directories) between the
-        configuration file and this source code file. A depth of 0
-        implies both files are in the same directory.
+    application_name : str
+        Application name.
     _configuration_file : File, optional
         Used for testing. Defaults to None.
 
@@ -62,44 +58,67 @@ def get_configuration(project_name, depth, _configuration_file=None):
     Raises
     ------
     EnvironmentError
-        If the project's environment has not been set.
+        If the application's environment has not been set.
+    EnvironmentError
+        If the application's configuration file path has not been set.
     KeyError
         If the configuration file does not have a top-level object
         corresponding to the environment.
     """
 
-    environment_variable = project_name.replace('_', '').upper() + '_ENVIRONMENT'
+    message = """
+One of the application's required environment variables could not be
+found in the shell environment.
+
+As an example, to set the environment variable for the current shell
+session, from the terminal run
+
+    export {environment_variable_name}="{environment_variable_value}"
+
+Note the lack of spaces (" ") between the assignment operator ("=").
+
+On the other hand, to set the environment variable for the current and
+all future shell sessions, from the terminal run
+
+    echo 'export {environment_variable_name}="{environment_variable_value}"' >> ~/.bashrc
+    source ~/.bashrc
+
+"""
+
+    processed_application_name = application_name.replace('_', '')
+    environment_variable_name = processed_application_name.upper() + '_ENVIRONMENT'
 
     try:
-        environment = getattr(Environment, os.environ[environment_variable])
+        environment = getattr(Environment, os.environ[environment_variable_name])
     except (AttributeError, KeyError):
-        message = """
-The project's environment could not be found in the shell environment.
-
-To set the project's environment for the current shell session, from the
-terminal run
-
-    export {environment_variable}="Production"
-
-To set the project's environment for the current and all future shell
-sessions, from the terminal run
-
-    echo 'export {environment_variable}="Production"' >> ~/.bashrc
-
+        extension = """
 Below is the list of acceptable values. Note they are case-sensitive.
     - Production
     - Staging
     - Testing
     - Development
+
 """
         raise EnvironmentError(
-            message.format(environment_variable=environment_variable))
+            message.format(
+                environment_variable_name=environment_variable_name,
+                environment_variable_value=Environment.Production.name)
+            + extension)
 
     if _configuration_file is None:
-        project_directory = (os.path.dirname(os.path.realpath(__file__))
-                             + '/'
-                             + '../' * depth)
-        with open(project_directory + 'project.config', 'r') as file:
+        environment_variable_name = (
+            processed_application_name.upper() + '_CONFIGURATION_FILE_PATH')
+
+        try:
+            configuration_file_path = os.environ[environment_variable_name]
+        except KeyError:
+            environment_variable_value = '/opt/{}/application.config'.format(
+                processed_application_name.lower())
+            raise EnvironmentError(message.format(
+                environment_variable_name=environment_variable_name,
+                environment_variable_value=environment_variable_value))
+
+        with open(configuration_file_path, 'r') as file:
             raw_configuration = file.read()
     else:
         raw_configuration = _configuration_file.read()

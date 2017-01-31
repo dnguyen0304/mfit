@@ -70,6 +70,14 @@ def get_argument_parser():
     app.ArgumentParser
     """
 
+    hostname_help = ("Hostname to listen in on. Defaults to "
+                     "\"%(default)s\". See the `flask.Flask.run()` "
+                     "documentation for more details.")
+    port_help = ("Web server port. Defaults to %(default)d. See the "
+                 "`flask.Flask.run()` documentation for more details.")
+    in_debug_mode_help = ("Disable application debugging. Defaults to "
+                          "%(default)s. See the `flask.Flask.run()` "
+                          "documentation for more details.")
     in_test_mode_help = ("Run the test suite. All remaining (i.e. unmatched) "
                          "arguments are passed to the test runner. "
                          "Acceptable values are equivalent to those for the "
@@ -78,6 +86,21 @@ def get_argument_parser():
     parser = ArgumentParser(
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter)
+
+    parser.add_argument('--hostname',
+                        type=str,
+                        nargs='?',
+                        default='127.0.0.1',
+                        help=hostname_help)
+    parser.add_argument('--port',
+                        type=int,
+                        nargs='?',
+                        default=5000,
+                        help=port_help)
+    parser.add_argument('--disable-debug-mode',
+                        dest='in_debug_mode',
+                        action='store_false',
+                        help=in_debug_mode_help)
     parser.add_argument('--in-test-mode',
                         dest='in_test_mode',
                         action='store_true',
@@ -90,6 +113,5 @@ if __name__ == '__main__':
     argument_parser = get_argument_parser()
     args, test_runner_args = argument_parser.parse_args()
 
-    mfit.main(in_test_mode=args.in_test_mode,
-              test_runner_args=test_runner_args)
+    mfit.main(test_runner_args=test_runner_args, **dict(args._get_kwargs()))
 

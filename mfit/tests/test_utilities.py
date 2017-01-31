@@ -15,7 +15,7 @@ __all__ = ['do_teardown',
            'test_get_configuration_invalid_environment',
            'test_get_configuration_invalid_schema',
            'test_get_configuration_missing_environment',
-           'test_get_configuration_standardize_project_name']
+           'test_get_configuration_standardize_application_name']
 
 
 def do_teardown():
@@ -36,23 +36,30 @@ def test_get_configuration():
 """)
 
     configuration = utilities.get_configuration(
-        project_name='foo',
-        depth=0,
+        application_name='foo',
         _configuration_file=_configuration_file)
 
     assert_equal(configuration['foo'], 'bar')
 
 
-def test_get_configuration_standardize_project_name():
+def test_get_configuration_standardize_application_name():
 
     with assert_raises_regexp(EnvironmentError, 'FOOBAR'):
-        utilities.get_configuration(project_name='foo_bar', depth=0)
+        utilities.get_configuration(application_name='foo_bar')
 
 
 @raises(EnvironmentError)
 def test_get_configuration_missing_environment():
 
-    utilities.get_configuration(project_name='foo', depth=0)
+    utilities.get_configuration(application_name='foo')
+
+
+@with_setup(teardown=do_teardown)
+@raises(EnvironmentError)
+def test_get_configuration_missing_configuration_file_path():
+
+    os.environ['FOO_ENVIRONMENT'] = 'Testing'
+    utilities.get_configuration(application_name='foo')
 
 
 @with_setup(teardown=do_teardown)
@@ -60,7 +67,7 @@ def test_get_configuration_missing_environment():
 def test_get_configuration_invalid_environment():
 
     os.environ['FOO_ENVIRONMENT'] = 'Test'
-    utilities.get_configuration(project_name='foo', depth=0)
+    utilities.get_configuration(application_name='foo')
 
 
 @with_setup(teardown=do_teardown)
@@ -76,7 +83,6 @@ def test_get_configuration_invalid_schema():
 }
 """)
 
-    utilities.get_configuration(project_name='foo',
-                                depth=0,
+    utilities.get_configuration(application_name='foo',
                                 _configuration_file=_configuration_file)
 

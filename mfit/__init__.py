@@ -11,10 +11,10 @@ from mfit import utilities
 
 __all__ = ['api', 'configuration', 'main']
 
-configuration = utilities.get_configuration(project_name=__name__, depth=1)
+configuration = utilities.get_configuration(application_name=__name__)
 
-_app = flask.Flask(__name__)
-api = flask_restful.Api(app=_app)
+app = flask.Flask(__name__)
+api = flask_restful.Api(app=app)
 
 api.add_resource(resources.Root, '/v1/')
 api.add_resource(resources.Users, '/v1/users/<int:id>')
@@ -31,7 +31,7 @@ api.add_resource(resources.AttemptsLogs, '/v1/attempts/<int:attempts_id>/logs/<i
 api.add_resource(resources.AttemptsLogsCollection, '/v1/attempts/<int:attempts_id>/logs/')
 
 
-def main(in_test_mode, test_runner_args):
+def main(hostname, port, in_debug_mode, in_test_mode, test_runner_args):
 
     """
     References
@@ -53,10 +53,6 @@ def main(in_test_mode, test_runner_args):
         # nose.TestProgram(), nose.main() exists only for backward
         # compatibility.
         nose.run(argv=test_runner_args)
-
-    elif configuration['environment'] == utilities.Environment.Production.name:
-        _app.run()
-
     else:
-        _app.run(debug=True)
+        app.run(host=hostname, port=port, debug=in_debug_mode)
 
