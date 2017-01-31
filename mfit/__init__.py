@@ -11,7 +11,7 @@ from mfit import utilities
 
 __all__ = ['api', 'configuration', 'main']
 
-configuration = utilities.get_configuration(project_name=__name__, depth=1)
+configuration = utilities.get_configuration(application_name=__name__)
 
 _app = flask.Flask(__name__)
 api = flask_restful.Api(app=_app)

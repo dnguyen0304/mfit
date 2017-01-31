@@ -1,11 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import importlib
 import setuptools
-import shutil
-import site
-import sys
 
 if __name__ == '__main__':
     project_name = 'mfit'
@@ -32,14 +28,4 @@ if __name__ == '__main__':
                      tests_require=['nose'],
                      include_package_data=True,
                      zip_safe=False)
-
-    # The configuration file needs to be included because the code
-    # relies on relative paths.
-    importlib.reload(site)
-
-    if sys.argv[1] == 'install':
-        for path in sys.path:
-            if 'site-packages' in path and project_name in path:
-                shutil.copy2('project.config', path)
-                break
 
