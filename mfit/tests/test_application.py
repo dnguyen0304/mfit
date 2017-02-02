@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import argparse
+import logging
 
 from nose.tools import (assert_false,
+                        assert_in,
                         assert_is_instance,
                         assert_list_equal,
                         assert_true,
@@ -10,7 +12,7 @@ from nose.tools import (assert_false,
 
 from mfit import application
 
-__all__ = ['TestArgumentParser']
+__all__ = ['TestArgumentParser', 'test_logger_exists']
 
 
 class TestArgumentParser:
@@ -51,4 +53,9 @@ class TestArgumentParser:
     def test_test_runner_options_without_in_test_mode(self):
         args = '--foo'.split()
         self.argument_parser.parse_args(args=args)
+
+
+def test_logger_exists():
+
+    assert_in('mfit', logging.Logger.manager.loggerDict)
 

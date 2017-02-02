@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import logging.config
 import os
 
 import flask
@@ -12,6 +13,8 @@ from mfit import utilities
 __all__ = ['api', 'configuration', 'main']
 
 configuration = utilities.get_configuration(application_name=__name__)
+
+logging.config.dictConfig(configuration['components']['logging'])
 
 app = flask.Flask(__name__)
 api = flask_restful.Api(app=app)
