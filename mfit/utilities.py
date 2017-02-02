@@ -2,9 +2,14 @@
 
 import enum
 import json
+import logging
 import os
+import uuid
 
-__all__ = ['AutomaticEnum', 'Environment', 'get_configuration']
+__all__ = ['AutomaticEnum',
+           'ContextFilter',
+           'Environment',
+           'get_configuration']
 
 
 class AutomaticEnum(enum.Enum):
@@ -22,6 +27,55 @@ class Environment(AutomaticEnum):
     Staging = ()
     Testing = ()
     Development = ()
+
+
+class ContextFilter(logging.Filter):
+
+    def __init__(self, application_name):
+
+        """
+        Parameters
+        ----------
+        application_name : str
+            Application name.
+
+        See Also
+        --------
+        logging.Filter.__init__()
+        """
+
+        super().__init__()
+        self._application_name = application_name
+
+    def filter(self, log_record):
+
+        """
+        Impart the logging call with additional context.
+
+        This processing adds the process's name and an event ID.
+        Assuming the log repository stores data across many
+        applications, services, etc., namespaces for differentiation
+        are mandatory.
+
+        Parameters
+        ----------
+        log_record : logging.LogRecord
+            Log record.
+
+        Returns
+        -------
+        bool
+            This method always returns True. Rather than filtering
+            LogRecords, they are updated in-place.
+
+        See Also
+        --------
+        logging.Filter.filter()
+        """
+
+        log_record.event_id = str(uuid.uuid4())
+        log_record.process_name = self._application_name
+        return True
 
 
 # TODO (duyn): Change this into a singleton.
@@ -131,8 +185,6 @@ Below is the list of acceptable values. Note they are case-sensitive.
             """corresponding to the environment (i.e. """
             """"{environment_name}").""")
         raise KeyError(message.format(environment_name=environment.name))
-
-    parsed_configuration.update({'application': {'name': application_name}})
 
     return parsed_configuration
 
