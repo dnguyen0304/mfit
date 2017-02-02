@@ -132,5 +132,7 @@ Below is the list of acceptable values. Note they are case-sensitive.
             """"{environment_name}").""")
         raise KeyError(message.format(environment_name=environment.name))
 
+    parsed_configuration.update({'application': {'name': application_name}})
+
     return parsed_configuration
 

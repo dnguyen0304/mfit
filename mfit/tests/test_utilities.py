@@ -42,6 +42,25 @@ def test_get_configuration():
     assert_equal(configuration['foo'], 'bar')
 
 
+@with_setup(teardown=do_teardown)
+def test_get_configuration_added_application_name():
+
+    os.environ['FOO_ENVIRONMENT'] = 'Testing'
+    _configuration_file = io.StringIO("""
+{
+  "Testing": {
+    "foo": "bar"
+  }
+}
+""")
+
+    configuration = utilities.get_configuration(
+        application_name='foo',
+        _configuration_file=_configuration_file)
+
+    assert_equal(configuration['application']['name'], 'foo')
+
+
 def test_get_configuration_standardize_application_name():
 
     with assert_raises_regexp(EnvironmentError, 'FOOBAR'):
