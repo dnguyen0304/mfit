@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import io
+import logging
 import os
 
 from nose.tools import (assert_equal,
+                        assert_in,
+                        assert_list_equal,
                         assert_raises,
                         assert_raises_regexp,
                         assert_true,
@@ -13,6 +16,7 @@ from nose.tools import (assert_equal,
 from mfit import utilities
 
 __all__ = ['TestContextFilter',
+           'TestJsonFormatter',
            'do_teardown',
            'test_get_configuration',
            'test_get_configuration_invalid_environment',
@@ -26,6 +30,7 @@ class TestContextFilter:
     def setup(self):
         class LogRecord:
             pass
+
         self.context_filter = utilities.ContextFilter(application_name='foo')
         self.log_record = LogRecord()
 
@@ -42,6 +47,39 @@ class TestContextFilter:
         self.context_filter.filter(log_record=self.log_record)
 
         assert_equal(self.log_record.process_name, 'foo')
+
+
+class TestJsonFormatter:
+
+    def setup(self):
+        class LogRecord:
+            pass
+
+        self.formatter = utilities.JsonFormatter(fmt=logging.BASIC_FORMAT)
+        self.log_record = LogRecord()
+
+        self.log_record.levelname = 'levelname'
+        self.log_record.name = 'name'
+        self.log_record.message = 'message'
+
+    def test_to_json(self):
+        output = self.formatter.formatMessage(record=self.log_record)
+
+        assert_true(output.startswith('{'))
+        assert_true(output.endswith('}'))
+        assert_in("'levelname': 'levelname'", output)
+        assert_in("'name': 'name'", output)
+        assert_in("'message': 'message'", output)
+
+    def test_parse_format(self):
+        expected = ['levelname', 'name', 'message']
+        output = self.formatter._parse_format(logging.BASIC_FORMAT)
+        assert_list_equal(output, expected)
+
+    def test_parse_format_no_replacement_fields(self):
+        expected = list()
+        output = self.formatter._parse_format('')
+        assert_list_equal(output, expected)
 
 
 def do_teardown():

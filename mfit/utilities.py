@@ -4,11 +4,13 @@ import enum
 import json
 import logging
 import os
+import re
 import uuid
 
 __all__ = ['AutomaticEnum',
            'ContextFilter',
            'Environment',
+           'JsonFormatter',
            'get_configuration']
 
 
@@ -76,6 +78,52 @@ class ContextFilter(logging.Filter):
         log_record.event_id = str(uuid.uuid4())
         log_record.process_name = self._application_name
         return True
+
+
+class JsonFormatter(logging.Formatter):
+
+    def formatMessage(self, record):
+
+        """
+        Generate the JSON representation of the log record.
+
+        Parameters
+        ----------
+        record : logging.LogRecord
+            LogRecord.
+
+        Returns
+        -------
+        str
+            Text representation of the log record formatted as JSON.
+        """
+
+        replacement_field_keys = self._parse_format(self._style._fmt)
+        format = str({key: '%(' + key + ')s' for key in replacement_field_keys})
+        return format % record.__dict__
+
+    @staticmethod
+    def _parse_format(format):
+
+        """
+        Extract all replacement field keys.
+
+        Only the percent style is supported.
+
+        Parameters
+        ----------
+        format : str
+            Percent-style format string.
+
+        Returns
+        -------
+        list
+            List of strings of the replacement field keys.
+        """
+
+        pattern = '%\((\w+)\)'
+        matches = re.findall(pattern=pattern, string=format)
+        return matches or list()
 
 
 # TODO (duyn): Change this into a singleton.
