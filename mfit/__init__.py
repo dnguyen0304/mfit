@@ -14,6 +14,7 @@ __all__ = ['api', 'configuration', 'main']
 
 configuration = utilities.get_configuration(application_name=__name__)
 
+logging.setLoggerClass(utilities.UnstructuredDataLogger)
 logging.config.dictConfig(configuration['components']['logging'])
 
 app = flask.Flask(__name__)
