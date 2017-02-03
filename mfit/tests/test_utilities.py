@@ -5,6 +5,7 @@ import logging
 import os
 
 from nose.tools import (assert_equal,
+                        assert_false,
                         assert_in,
                         assert_list_equal,
                         assert_raises,
@@ -17,12 +18,34 @@ from mfit import utilities
 
 __all__ = ['TestContextFilter',
            'TestJsonFormatter',
+           'TestUnstructuredDataLogger',
            'do_teardown',
            'test_get_configuration',
            'test_get_configuration_invalid_environment',
            'test_get_configuration_invalid_schema',
            'test_get_configuration_missing_environment',
-           'test_get_configuration_standardize_application_name']
+           'test_get_configuration_standardize_application_name',
+           'test_format_extra_as_json']
+
+
+class TestUnstructuredDataLogger:
+
+    def test_can_identify_extra(self):
+        log_record = TestUnstructuredDataLogger.get_log_record()
+        assert_true(hasattr(log_record, '_extra'))
+
+    @staticmethod
+    def get_log_record(extra=None):
+        logger = utilities.UnstructuredDataLogger(name='')
+        log_record = logger.makeRecord(name='',
+                                       level='',
+                                       fn='',
+                                       lno='',
+                                       msg='',
+                                       args='',
+                                       exc_info='',
+                                       extra=extra or dict())
+        return log_record
 
 
 class TestContextFilter:
@@ -71,6 +94,14 @@ class TestJsonFormatter:
         assert_in("'name': 'name'", output)
         assert_in("'message': 'message'", output)
 
+    def test_to_json_does_not_raise_attribute_error(self):
+        raised_attribute_error = False
+        try:
+            self.formatter.formatMessage(record=self.log_record)
+        except AttributeError:
+            raised_attribute_error = True
+        assert_false(raised_attribute_error)
+
     def test_parse_format(self):
         expected = ['levelname', 'name', 'message']
         output = self.formatter._parse_format(logging.BASIC_FORMAT)
@@ -80,6 +111,18 @@ class TestJsonFormatter:
         expected = list()
         output = self.formatter._parse_format('')
         assert_list_equal(output, expected)
+
+
+def test_format_extra_as_json():
+
+    extra = {'foo': 'bar'}
+    log_record = TestUnstructuredDataLogger.get_log_record(extra=extra)
+    log_record.message = ''
+    formatter = utilities.JsonFormatter()
+
+    output = formatter.formatMessage(record=log_record)
+
+    assert_in("'foo': 'bar'", output)
 
 
 def do_teardown():

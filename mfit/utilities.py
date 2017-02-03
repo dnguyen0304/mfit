@@ -11,6 +11,7 @@ __all__ = ['AutomaticEnum',
            'ContextFilter',
            'Environment',
            'JsonFormatter',
+           'UnstructuredDataLogger',
            'get_configuration']
 
 
@@ -29,6 +30,45 @@ class Environment(AutomaticEnum):
     Staging = ()
     Testing = ()
     Development = ()
+
+
+class UnstructuredDataLogger(logging.Logger):
+
+    def makeRecord(self,
+                   name,
+                   level,
+                   fn,
+                   lno,
+                   msg,
+                   args,
+                   exc_info,
+                   func=None,
+                   extra=None,
+                   sinfo=None):
+
+        """
+        Create a new LogRecord.
+
+        This extends the factory method so "extra" key-value pairs can
+        be identified later.
+
+        Returns
+        -------
+        logging.LogRecord
+        """
+
+        log_record = super().makeRecord(name=name,
+                                        level=level,
+                                        fn=fn,
+                                        lno=lno,
+                                        msg=msg,
+                                        args=args,
+                                        exc_info=exc_info,
+                                        func=func,
+                                        extra=extra,
+                                        sinfo=sinfo)
+        log_record._extra = extra
+        return log_record
 
 
 class ContextFilter(logging.Filter):
@@ -87,6 +127,10 @@ class JsonFormatter(logging.Formatter):
         """
         Generate the JSON representation of the log record.
 
+        When configured alongside the UnstructuredDataLogger, arbitrary
+        data passed within the "extra" parameter is dynamically
+        unpacked and added to the log record.
+
         Parameters
         ----------
         record : logging.LogRecord
@@ -96,11 +140,23 @@ class JsonFormatter(logging.Formatter):
         -------
         str
             Text representation of the log record formatted as JSON.
+
+        See Also
+        --------
+        utilities.UnstructuredDataLogger
         """
 
         replacement_field_keys = self._parse_format(self._style._fmt)
-        format = str({key: '%(' + key + ')s' for key in replacement_field_keys})
-        return format % record.__dict__
+        format = [(key, '%(' + key + ')s') for key in replacement_field_keys]
+
+        try:
+            for item in record._extra.items():
+                setattr(record, *item)
+                format.append((item[0], '%(' + item[0] + ')s'))
+        except AttributeError:
+            pass
+
+        return str(dict(format)) % record.__dict__
 
     @staticmethod
     def _parse_format(format):
