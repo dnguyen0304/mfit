@@ -76,12 +76,12 @@ class TestJsonFormatter:
         assert_in("'message': 'message'", output)
 
     def test_to_json_does_not_raise_attribute_error(self):
-        raised_attribute_error = False
+        raised_error = False
         try:
             self.formatter.formatMessage(record=self.log_record)
         except AttributeError:
-            raised_attribute_error = True
-        assert_false(raised_attribute_error)
+            raised_error = True
+        assert_false(raised_error)
 
     def test_parse_format(self):
         expected = ['levelname', 'name', 'message']
