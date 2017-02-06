@@ -225,7 +225,7 @@ class ContextFilter(logging.Filter):
         logging.Filter.filter()
         """
 
-        log_record.event_id = str(uuid.uuid4())
+        log_record.event_id = str(uuid.uuid4()).replace('-', '')
         log_record.process_name = self._application_name
         return True
 
