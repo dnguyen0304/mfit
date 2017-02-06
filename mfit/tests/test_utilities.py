@@ -48,30 +48,6 @@ class TestUnstructuredDataLogger:
         return log_record
 
 
-class TestContextFilter:
-
-    def setup(self):
-        class LogRecord:
-            pass
-
-        self.context_filter = utilities.ContextFilter(application_name='foo')
-        self.log_record = LogRecord()
-
-    def test_has_event_id(self):
-        with assert_raises(AttributeError):
-            self.log_record.event_id
-        self.context_filter.filter(log_record=self.log_record)
-
-        assert_true(self.log_record.event_id)
-
-    def test_has_process_name(self):
-        with assert_raises(AttributeError):
-            self.log_record.process_name
-        self.context_filter.filter(log_record=self.log_record)
-
-        assert_equal(self.log_record.process_name, 'foo')
-
-
 class TestJsonFormatter:
 
     def setup(self):
@@ -111,6 +87,30 @@ class TestJsonFormatter:
         expected = list()
         output = self.formatter._parse_format('')
         assert_list_equal(output, expected)
+
+
+class TestContextFilter:
+
+    def setup(self):
+        class LogRecord:
+            pass
+
+        self.context_filter = utilities.ContextFilter(application_name='foo')
+        self.log_record = LogRecord()
+
+    def test_has_event_id(self):
+        with assert_raises(AttributeError):
+            self.log_record.event_id
+        self.context_filter.filter(log_record=self.log_record)
+
+        assert_true(self.log_record.event_id)
+
+    def test_has_process_name(self):
+        with assert_raises(AttributeError):
+            self.log_record.process_name
+        self.context_filter.filter(log_record=self.log_record)
+
+        assert_equal(self.log_record.process_name, 'foo')
 
 
 def test_format_extra_as_json():
