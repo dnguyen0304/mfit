@@ -1,16 +1,20 @@
 # -*- coding: utf-8 -*-
 
 import enum
+import functools
 import json
 import logging
 import os
 import re
 import uuid
 
+import kafka
+
 __all__ = ['AutomaticEnum',
            'ContextFilter',
            'Environment',
            'JsonFormatter',
+           'KafkaHandler',
            'UnstructuredDataLogger',
            'get_configuration']
 
@@ -131,6 +135,50 @@ class JsonFormatter(logging.Formatter):
         pattern = '%\((\w+)\)'
         matches = re.findall(pattern=pattern, string=format)
         return matches or list()
+
+
+class KafkaHandler(logging.Handler):
+
+    def __init__(self, hostname, port, topic_name, level=logging.NOTSET):
+
+        """
+        Handler for logging to Kafka.
+
+        Parameters
+        ----------
+        hostname : str
+            Hostname.
+        port : int
+            Port.
+        topic_name : str
+            Topic name.
+        level : int
+            Numeric value of the severity level.
+        """
+
+        super().__init__(level=level)
+
+        self._producer = KafkaHandler._get_producer(hostname=hostname,
+                                                    port=port,
+                                                    topic_name=topic_name)
+
+    @staticmethod
+    def _get_producer(hostname, port, topic_name):
+        class KafkaProducer(kafka.KafkaProducer):
+            isend = functools.partialmethod(func=kafka.KafkaProducer.send,
+                                            topic=topic_name)
+        bootstrap_server = hostname + ':' + str(port)
+        producer = KafkaProducer(
+            bootstrap_servers=[bootstrap_server],
+            value_serializer=lambda x: str(x).encode('utf-8'))
+        return producer
+
+    def emit(self, record):
+        try:
+            message = self.format(record=record)
+            self._producer.isend(value=message)
+        except Exception:
+            self.handleError(record=record)
 
 
 class ContextFilter(logging.Filter):

@@ -4,6 +4,7 @@ import io
 import logging
 import os
 
+from nose import SkipTest
 from nose.tools import (assert_equal,
                         assert_false,
                         assert_in,
@@ -14,10 +15,14 @@ from nose.tools import (assert_equal,
                         raises,
                         with_setup)
 
+# Should this module not import the mfit package to respect the package
+# hierarchy?
+import mfit
 from mfit import utilities
 
 __all__ = ['TestContextFilter',
            'TestJsonFormatter',
+           'TestKafkaHandler',
            'TestUnstructuredDataLogger',
            'do_teardown',
            'test_get_configuration',
@@ -87,6 +92,57 @@ class TestJsonFormatter:
         expected = list()
         output = self.formatter._parse_format('')
         assert_list_equal(output, expected)
+
+
+class TestKafkaHandler:
+
+    def setup(self):
+        self.configuration = (mfit.configuration['components']
+                                                ['logging']
+                                                ['handlers']
+                                                ['message_queue'])
+        hostname = self.configuration['hostname']
+        port = self.configuration['port']
+
+        self.producer = utilities.KafkaHandler._get_producer(hostname=hostname,
+                                                             port=port,
+                                                             topic_name='')
+
+    def test_get_producer_accepts_port_of_type_numeric(self):
+        raised_error = False
+        hostname = self.configuration['hostname']
+        port = int(self.configuration['port'])
+
+        try:
+            utilities.KafkaHandler._get_producer(hostname=hostname,
+                                                 port=port,
+                                                 topic_name='')
+        except TypeError:
+            raised_error = True
+
+        assert_false(raised_error)
+
+    def test_get_producer_producer_has_isend_method(self):
+        assert_true(hasattr(self.producer, 'isend'))
+
+    # A proper teardown for the following test would require deleting
+    # Topics. As noted below, the Kafka server does not expose an API
+    # for deleting Topics [1]. Implementing this feature is
+    # "non-trivial" [2].
+    #
+    # References
+    # ----------
+    # .. [1] "Topics are not deleted but lingered."
+    #    https://github.com/dpkp/kafka-python/issues/363
+    # .. [2] "Feature: Delete topics"
+    #    https://github.com/dpkp/kafka-python/issues/433
+    def test_get_producer_producer_isend_only_requires_value_parameter(self):
+        raise SkipTest
+
+    def test_get_producer_producer_serialization(self):
+        expected = b'foo'
+        output = self.producer.config['value_serializer']('foo')
+        assert_equal(output, expected)
 
 
 class TestContextFilter:
