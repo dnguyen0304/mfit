@@ -1,10 +1,22 @@
 # -*- coding: utf-8 -*-
 
 import enum
+import functools
 import json
+import logging
 import os
+import re
+import uuid
 
-__all__ = ['AutomaticEnum', 'Environment', 'get_configuration']
+import kafka
+
+__all__ = ['AutomaticEnum',
+           'ContextFilter',
+           'Environment',
+           'JsonFormatter',
+           'KafkaHandler',
+           'UnstructuredDataLogger',
+           'get_configuration']
 
 
 class AutomaticEnum(enum.Enum):
@@ -22,6 +34,200 @@ class Environment(AutomaticEnum):
     Staging = ()
     Testing = ()
     Development = ()
+
+
+class UnstructuredDataLogger(logging.Logger):
+
+    def makeRecord(self,
+                   name,
+                   level,
+                   fn,
+                   lno,
+                   msg,
+                   args,
+                   exc_info,
+                   func=None,
+                   extra=None,
+                   sinfo=None):
+
+        """
+        Create a new LogRecord.
+
+        This extends the factory method so "extra" key-value pairs can
+        be identified later.
+
+        Returns
+        -------
+        logging.LogRecord
+        """
+
+        log_record = super().makeRecord(name=name,
+                                        level=level,
+                                        fn=fn,
+                                        lno=lno,
+                                        msg=msg,
+                                        args=args,
+                                        exc_info=exc_info,
+                                        func=func,
+                                        extra=extra,
+                                        sinfo=sinfo)
+        log_record._extra = extra
+        return log_record
+
+
+class JsonFormatter(logging.Formatter):
+
+    def formatMessage(self, record):
+
+        """
+        Generate the JSON representation of the log record.
+
+        When configured alongside the UnstructuredDataLogger, arbitrary
+        data passed within the "extra" parameter is dynamically
+        unpacked and added to the log record.
+
+        Parameters
+        ----------
+        record : logging.LogRecord
+            LogRecord.
+
+        Returns
+        -------
+        str
+            Text representation of the log record formatted as JSON.
+
+        See Also
+        --------
+        utilities.UnstructuredDataLogger
+        """
+
+        replacement_field_keys = self._parse_format(self._style._fmt)
+        format = [(key, '%(' + key + ')s') for key in replacement_field_keys]
+
+        try:
+            for item in record._extra.items():
+                setattr(record, *item)
+                format.append((item[0], '%(' + item[0] + ')s'))
+        except AttributeError:
+            pass
+
+        return str(dict(format)) % record.__dict__
+
+    @staticmethod
+    def _parse_format(format):
+
+        """
+        Extract all replacement field keys.
+
+        Only the percent style is supported.
+
+        Parameters
+        ----------
+        format : str
+            Percent-style format string.
+
+        Returns
+        -------
+        list
+            List of strings of the replacement field keys.
+        """
+
+        pattern = '%\((\w+)\)'
+        matches = re.findall(pattern=pattern, string=format)
+        return matches or list()
+
+
+class KafkaHandler(logging.Handler):
+
+    def __init__(self, hostname, port, topic_name, level=logging.NOTSET):
+
+        """
+        Handler for logging to Kafka.
+
+        Parameters
+        ----------
+        hostname : str
+            Hostname.
+        port : int
+            Port.
+        topic_name : str
+            Topic name.
+        level : int
+            Numeric value of the severity level.
+        """
+
+        super().__init__(level=level)
+
+        self._producer = KafkaHandler._get_producer(hostname=hostname,
+                                                    port=port,
+                                                    topic_name=topic_name)
+
+    @staticmethod
+    def _get_producer(hostname, port, topic_name):
+        class KafkaProducer(kafka.KafkaProducer):
+            isend = functools.partialmethod(func=kafka.KafkaProducer.send,
+                                            topic=topic_name)
+        bootstrap_server = hostname + ':' + str(port)
+        producer = KafkaProducer(
+            bootstrap_servers=[bootstrap_server],
+            value_serializer=lambda x: str(x).encode('utf-8'))
+        return producer
+
+    def emit(self, record):
+        try:
+            message = self.format(record=record)
+            self._producer.isend(value=message)
+        except Exception:
+            self.handleError(record=record)
+
+
+class ContextFilter(logging.Filter):
+
+    def __init__(self, application_name):
+
+        """
+        Parameters
+        ----------
+        application_name : str
+            Application name.
+
+        See Also
+        --------
+        logging.Filter.__init__()
+        """
+
+        super().__init__()
+        self._application_name = application_name
+
+    def filter(self, log_record):
+
+        """
+        Impart the logging call with additional context.
+
+        This processing adds the process's name and an event ID.
+        Assuming the log repository stores data across many
+        applications, services, etc., namespaces for differentiation
+        are mandatory.
+
+        Parameters
+        ----------
+        log_record : logging.LogRecord
+            Log record.
+
+        Returns
+        -------
+        bool
+            This method always returns True. Rather than filtering
+            LogRecords, they are updated in-place.
+
+        See Also
+        --------
+        logging.Filter.filter()
+        """
+
+        log_record.event_id = str(uuid.uuid4()).replace('-', '')
+        log_record.process_name = self._application_name
+        return True
 
 
 # TODO (duyn): Change this into a singleton.
