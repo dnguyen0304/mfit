@@ -4,7 +4,9 @@ import json
 import logging.config
 import os
 
-__all__ = ['configuration']
+from . import protos
+
+__all__ = ['configuration', 'protos']
 
 
 def get_configuration(application_name):

@@ -11,7 +11,7 @@ if __name__ == '__main__':
     with open('./README.md', 'r') as file:
         long_description = file.read()
 
-    install_requires = list()
+    install_requires = ['protobuf==3.2.0']
 
     setuptools.setup(name=project_name,
                      version='1.0.0',
@@ -21,6 +21,8 @@ if __name__ == '__main__':
                      author='Duy Nguyen',
                      author_email='dnguyen0304@gmail.com',
                      license='MIT',
+                     classifiers=['Programming Language :: Python :: 2.7'],
+                     packages=['mfit', 'mfit.protos'],
                      install_requires=install_requires,
                      test_suite='nose.collector',
                      tests_require=['nose'],
