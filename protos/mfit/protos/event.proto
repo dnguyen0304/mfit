@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package mfit;
+
+import "google/protobuf/timestamp.proto";
+
+import "mfit/protos/log.proto";
+import "mfit/protos/uuid.proto";
+
+message Event {
+  enum SeverityLevel {
+    CRITICAL = 0;
+    ERROR = 1;
+    INFORMATIONAL = 2;
+    DEBUG = 3;
+  }
+
+  enum Topic {
+    LOG_ADD = 0;
+  }
+
+  enum State {
+    PENDING = 0;
+    STARTING = 1;
+    COMPLETE = 2;
+  };
+
+  google.protobuf.Timestamp timestamp = 1;
+  SeverityLevel severityLevel = 2;
+  Topic topic = 3;
+  State state = 4;
+  Uuid correlationId = 5;
+
+  Log body = 6;
+}
