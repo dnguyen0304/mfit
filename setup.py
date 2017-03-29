@@ -11,7 +11,10 @@ if __name__ == '__main__':
     with open('./README.md', 'r') as file:
         long_description = file.read()
 
-    install_requires = ['protobuf==3.2.0']
+    install_requires = ['protobuf==3.2.0',
+                        'python-dateutil==2.6.0',
+                        'pytz==2016.10',
+                        'redis==2.10.5']
 
     setuptools.setup(name=project_name,
                      version='1.0.0',
