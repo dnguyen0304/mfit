@@ -2,5 +2,5 @@
 
 ## v1.0.0 (Pending)
 ##### Features
-- Added Lambda handlers.
+- Added Dockerfile for building mFit.
 - Added protocol buffers.
