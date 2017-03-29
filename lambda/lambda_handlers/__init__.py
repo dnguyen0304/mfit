@@ -2,8 +2,8 @@
 
 from __future__ import absolute_import
 
-from . import get_all_from_today
 from . import log_add
+from . import log_get_all_from_today
 
-__all__ = ['get_all_from_today',
-           'log_add']
+__all__ = ['log_add',
+           'log_get_all_from_today']
