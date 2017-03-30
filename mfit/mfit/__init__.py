@@ -36,7 +36,7 @@ def add(habit_id, value):
     redis_client = redis.StrictRedis(host=configuration['redis']['hostname'],
                                      port=configuration['redis']['port'])
 
-    next_log_id = redis_client.get('log:id:next')
+    next_log_id = redis_client.incr('log:id:next')
 
     now = datetime.datetime.utcnow()
     now.replace(tzinfo=pytz.utc)
@@ -51,8 +51,6 @@ def add(habit_id, value):
            'updated_by': None}
 
     redis_client.rpush('log:all', json.dumps(log))
-
-    redis_client.incr('log:id:next')
 
 
 def get_all_from_today():
