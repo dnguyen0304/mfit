@@ -2,6 +2,6 @@
 
 from __future__ import absolute_import
 
-from . import handlers
+from . import log_add
 
-__all__ = ['handlers']
+__all__ = ['log_add']
