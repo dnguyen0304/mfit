@@ -103,3 +103,6 @@ ENV/
 
 # IntelliJ IDEA / PyCharm
 .idea/
+
+# Protocol Buffers
+*_pb2.py

@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package mfit;
+
+message Uuid {
+  string value = 1;
+}
