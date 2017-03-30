@@ -5,5 +5,4 @@
 - Added support for getting all logs from today.
 - Added support for adding logs.
 - Added Dockerfile for building mFit.
-- Added Lambda handler for adding logs.
 - Added protocol buffers.
