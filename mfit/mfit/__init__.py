@@ -41,9 +41,9 @@ def add(habit_id, value):
     now = datetime.datetime.utcnow()
     now.replace(tzinfo=pytz.utc)
 
-    log = {'log_id': next_log_id,
+    log = {'log_id': int(next_log_id),
            'attempt_id': 1,
-           'habit_id': habit_id,
+           'habit_id': int(habit_id),
            'value': int(value),
            'created_at': now.isoformat(),
            'created_by': 1,
