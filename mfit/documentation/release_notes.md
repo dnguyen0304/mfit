@@ -1,5 +1,9 @@
 # Release Notes
 
+## v1.0.1 (2017-03-31)
+##### Features
+- Fixed log values being type casted into integers instead of doubles (`ME-617`).
+
 ## v1.0.0 (2017-03-30)
 ##### Features
 - Added support for getting all logs from today.
