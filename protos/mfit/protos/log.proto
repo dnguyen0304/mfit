@@ -7,7 +7,7 @@ import "google/protobuf/timestamp.proto";
 message Log {
   int32 attemptsId = 1;
   int32 habitsId = 2;
-  int32 value = 3;
+  double value = 3;
 
   google.protobuf.Timestamp createdAt = 5;
   int32 createdBy = 6;

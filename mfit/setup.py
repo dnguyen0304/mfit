@@ -17,7 +17,7 @@ if __name__ == '__main__':
                         'redis==2.10.5']
 
     setuptools.setup(name=project_name,
-                     version='1.0.0',
+                     version='1.0.1',
                      description=description,
                      long_description=long_description,
                      url='https://github.com/dnguyen0304/mfit.git',
