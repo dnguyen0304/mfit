@@ -44,7 +44,7 @@ def add(habit_id, value):
     log = {'log_id': int(next_log_id),
            'attempt_id': 1,
            'habit_id': int(habit_id),
-           'value': int(value),
+           'value': float(value),
            'created_at': now.isoformat(),
            'created_by': 1,
            'updated_at': None,
@@ -84,5 +84,5 @@ def get_all_from_today():
     for grouped_result in grouped_results:
         grouped_result[1] = functools.reduce(lambda x, y: x + y['value'],
                                              grouped_result[1],
-                                             0)
+                                             0.0)
     return grouped_results
