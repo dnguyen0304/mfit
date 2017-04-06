@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package mfit;
+
+message LogConstructor {
+  string interfaceVersion = 1;
+
+  int32 attemptId = 2;
+  int32 habitId = 3;
+  double value = 4;
+
+  int32 createdBy = 5;
+}

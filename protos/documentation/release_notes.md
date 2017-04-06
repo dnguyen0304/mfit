@@ -2,7 +2,7 @@
 
 ## v2.0.0 (Pending)
 ##### Changes
-- Removed Uuid interface definition.
+- Added mfit.protos.LogConstructor (`ME-617`).
 
 ## v1.0.1 (2017-03-31)
 ##### Features
