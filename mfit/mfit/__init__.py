@@ -12,8 +12,10 @@ import pytz
 import redis
 
 from . import protos
+from . import enumerations
+from . import models
 
-__all__ = ['configuration', 'protos']
+__all__ = ['configuration', 'enumerations', 'models', 'protos']
 
 
 def get_configuration(application_name):
@@ -51,6 +53,60 @@ def add(habit_id, value):
            'updated_by': None}
 
     redis_client.rpush('log:all', json.dumps(log))
+
+
+def _get_tomorrow(timezone):
+
+    """
+    Get the start of tomorrow.
+
+    The datetime is computed with respect to the specified timezone
+    and returned converted into UTC.
+
+    Parameters
+    ----------
+    timezone : pytz.tzinfo.DstTzInfo subclass
+
+    Returns
+    -------
+    datetime.datetime
+    """
+
+    now = (datetime.datetime.utcnow()
+                            .replace(tzinfo=pytz.utc)
+                            .astimezone(tz=timezone))
+    offset = now + datetime.timedelta(days=1)
+
+    # The implementation of tzinfo in pytz differs from that of the
+    # standard library. With a couple exceptions, you should therefore
+    # be using the localize method instead of the tzinfo parameter.
+    tomorrow_start_naive = datetime.datetime(year=offset.year,
+                                             month=offset.month,
+                                             day=offset.day)
+    tomorrow_start = timezone.localize(dt=tomorrow_start_naive)
+
+    return tomorrow_start.astimezone(tz=pytz.utc)
+
+
+def _get_tomorrow_in_seconds(timezone):
+
+    """
+    Get the start of tomorrow in seconds (i.e. as a Unix timestamp).
+
+    Parameters
+    ----------
+    timezone : pytz.tzinfo.DstTzInfo subclass
+
+    Returns
+    -------
+    float
+    """
+
+    epoch = datetime.datetime(year=1970, month=1, day=1, tzinfo=pytz.utc)
+    tomorrow_start = _get_tomorrow(timezone=timezone)
+    seconds = (tomorrow_start - epoch).total_seconds()
+
+    return seconds
 
 
 def get_all_from_today():
