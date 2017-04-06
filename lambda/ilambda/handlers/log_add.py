@@ -13,5 +13,5 @@ def log_add(event, context):
 
     mfit.add(habit_id=event['habit_id'], value=event['value'])
     results = mfit.get_all_from_today()
-    for result in results:
+    for result in sorted(results.items()):
         print(result)
