@@ -35,17 +35,5 @@ class Event(object):
         return self._proto.SerializeToString()
 
     @property
-    def topic(self):
-        return self._proto.topic
-
-    @property
     def arguments(self):
         return self._proto.arguments
-
-    @property
-    def correlation_id(self):
-        return self._proto.correlationId
-
-    @correlation_id.setter
-    def correlation_id(self, value):
-        self._proto.correlationId = value

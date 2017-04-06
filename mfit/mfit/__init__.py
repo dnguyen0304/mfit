@@ -38,21 +38,32 @@ def add(habit_id, value):
     redis_client = redis.StrictRedis(host=configuration['redis']['hostname'],
                                      port=configuration['redis']['port'])
 
-    next_log_id = redis_client.incr('log:id:next')
+    # 1. Create a new event object.
+    event = models.Event(topic=enumerations.EventTopic.LOG_ADDED)
+    event.arguments.attemptId = 1
+    event.arguments.habitId = habit_id
+    event.arguments.value = value
+    event.arguments.createdBy = 1
 
-    now = datetime.datetime.utcnow()
-    now.replace(tzinfo=pytz.utc)
+    # 2. Serialize the new event object and add it to the queue.
+    redis_client.rpush('event:all', event.to_string())
 
-    log = {'log_id': int(next_log_id),
-           'attempt_id': 1,
-           'habit_id': int(habit_id),
-           'value': float(value),
-           'created_at': now.isoformat(),
-           'created_by': 1,
-           'updated_at': None,
-           'updated_by': None}
+    # 3. Get the newest event from the queue and deserialize it.
+    event = models.Event.from_string(redis_client.lindex('event:all', -1))
 
-    redis_client.rpush('log:all', json.dumps(log))
+    # 4. Handle the event.
+    key = 'attempt:{}:summary'.format(event.arguments.attemptId)
+
+    # Incrementing a value does not reset it's key's expiration
+    # timeout.
+    time_to_live = redis_client.ttl(key)
+    redis_client.hincrbyfloat(key,
+                              event.arguments.habitId,
+                              event.arguments.value)
+    if time_to_live < 0:
+        timezone = pytz.timezone('America/New_York')
+        timestamp = _get_tomorrow_in_seconds(timezone=timezone)
+        redis_client.expireat(key, int(timestamp))
 
 
 def _get_tomorrow(timezone):

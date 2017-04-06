@@ -2,6 +2,8 @@
 
 ## v1.1.0 (Pending)
 ##### Features
+- Changed adding logs to use summaries.
+- Added Event persistent storage (`ME-617`).
 - Added Event model (`ME-617`).
 - Added EventTopic and EventState enumerations (`ME-617`).
 - Added Event and LogConstructor interface definitions (`ME-617`).
