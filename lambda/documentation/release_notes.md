@@ -1,6 +1,6 @@
 # Release Notes
 
-## v1.2.0 (Pending)
+## v1.2.0 (2017-04-06)
 ##### Features
 - Changed getting all logs from today to use summaries (`ME-619`).
 

@@ -1,6 +1,6 @@
 # Release Notes
 
-## v2.0.0 (Pending)
+## v2.0.0 (2017-04-06)
 ##### Changes
 - Added mfit.protos.Event (`ME-619`).
 - Added mfit.protos.LogConstructor (`ME-619`).
