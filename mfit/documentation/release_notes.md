@@ -1,5 +1,9 @@
 # Release Notes
 
+## v1.1.0 (Pending)
+##### Features
+- Added interface definitions for Events and LogConstructors (`ME-617`).
+
 ## v1.0.1 (2017-03-31)
 ##### Features
 - Fixed log values being type casted into integers instead of doubles (`ME-617`).

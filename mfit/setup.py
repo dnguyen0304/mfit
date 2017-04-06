@@ -25,7 +25,7 @@ if __name__ == '__main__':
                      author_email='dnguyen0304@gmail.com',
                      license='MIT',
                      classifiers=['Programming Language :: Python :: 2.7'],
-                     packages=['mfit', 'mfit.protos'],
+                     packages=['mfit', 'mfit.models', 'mfit.protos'],
                      install_requires=install_requires,
                      test_suite='nose.collector',
                      tests_require=['nose'],

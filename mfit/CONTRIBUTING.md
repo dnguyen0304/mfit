@@ -120,8 +120,22 @@ CREATE TABLE users (
 - Data type constraints **should** trend towards being more relaxed.
 - Datetime (data types that store both date and time) columns **must** include the time zone.
 
-Python
-------
+# Python
+### Package Hierarchy
+```
+          Clients
+API -----------------------
+      Lambda Handlers
+          |     |
+    Services Views
+     |        |
+Repositories  |
+           |  |
+          Models
+           |
+          Interface Definitions
+```
+
 ### General
 - Import statements **should** be sorted to enforce import order.
 - Packages **must** have a `__all__` index in `__init__.py`.
