@@ -8,20 +8,14 @@ import "mfit/protos/log_constructor.proto";
 
 message Event {
   enum Topic {
-    LOG_ADD = 0;
-  }
-
-  enum State {
-    STARTING = 0;
-    COMPLETE = 1;
+    LOG_ADDED = 0;
   }
 
   string interfaceVersion = 1;
 
   Topic topic = 2;
-  State state = 3;
-  LogConstructor arguments = 4;
-  string correlationId = 5;
+  LogConstructor arguments = 3;
+  string correlationId = 4;
 
-  google.protobuf.Timestamp createdAt = 6;
+  google.protobuf.Timestamp createdAt = 5;
 }
