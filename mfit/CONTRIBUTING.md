@@ -138,6 +138,7 @@ Repositories  |
 
 ### General
 - Import statements **should** be sorted to enforce import order.
+- Intra-package import statements **should** use the explicit relative import form.
 - Packages **must** have a `__all__` index in `__init__.py`.
 - `__all__` indices **should** be sorted alphabetically.
 - Modules **could** have a `__all__` index.

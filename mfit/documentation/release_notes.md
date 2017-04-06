@@ -2,6 +2,7 @@
 
 ## v1.1.0 (Pending)
 ##### Features
+- Added enumerations for EventTopics and EventStates (`ME-617`).
 - Added interface definitions for Events and LogConstructors (`ME-617`).
 
 ## v1.0.1 (2017-03-31)
