@@ -1,20 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from .base import Base
-from .habit_groups import HabitGroups
-from .habits import Habits
-from .routines_units import RoutinesUnits
-from .users import Users
-from .attempts import Attempts
-from .routines import Routines
-from .attempts_logs import AttemptsLogs
+from .event import Event
 
-__all__ = ['Attempts',
-           'AttemptsLogs',
-           'Base',
-           'HabitGroups',
-           'Habits',
-           'Routines',
-           'RoutinesUnits',
-           'Users']
-
+__all__ = ['Event']

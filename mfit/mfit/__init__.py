@@ -1,19 +1,18 @@
 # -*- coding: utf-8 -*-
 
 import datetime
-import functools
-import itertools
 import json
 import logging.config
 import os
 
-import dateutil.parser
 import pytz
 import redis
 
 from . import protos
+from . import enumerations
+from . import models
 
-__all__ = ['configuration', 'protos']
+__all__ = ['configuration', 'enumerations', 'models', 'protos']
 
 
 def get_configuration(application_name):
@@ -36,21 +35,86 @@ def add(habit_id, value):
     redis_client = redis.StrictRedis(host=configuration['redis']['hostname'],
                                      port=configuration['redis']['port'])
 
-    next_log_id = redis_client.incr('log:id:next')
+    # 1. Create a new event object.
+    event = models.Event(topic=enumerations.EventTopic.LOG_ADDED)
+    event.arguments.attemptId = 1
+    event.arguments.habitId = habit_id
+    event.arguments.value = value
+    event.arguments.createdBy = 1
 
-    now = datetime.datetime.utcnow()
-    now.replace(tzinfo=pytz.utc)
+    # 2. Serialize the new event object and add it to the queue.
+    redis_client.rpush('event:all', event.to_string())
 
-    log = {'log_id': int(next_log_id),
-           'attempt_id': 1,
-           'habit_id': int(habit_id),
-           'value': float(value),
-           'created_at': now.isoformat(),
-           'created_by': 1,
-           'updated_at': None,
-           'updated_by': None}
+    # 3. Get the newest event from the queue and deserialize it.
+    event = models.Event.from_string(redis_client.lindex('event:all', -1))
 
-    redis_client.rpush('log:all', json.dumps(log))
+    # 4. Handle the event.
+    key = 'attempt:{}:summary'.format(event.arguments.attemptId)
+
+    # Incrementing a value does not reset it's key's expiration
+    # timeout.
+    time_to_live = redis_client.ttl(key)
+    redis_client.hincrbyfloat(key,
+                              event.arguments.habitId,
+                              event.arguments.value)
+    if time_to_live < 0:
+        timezone = pytz.timezone('America/New_York')
+        timestamp = _get_tomorrow_in_seconds(timezone=timezone)
+        redis_client.expireat(key, int(timestamp))
+
+
+def _get_tomorrow(timezone):
+
+    """
+    Get the start of tomorrow.
+
+    The datetime is computed with respect to the specified timezone
+    and returned converted into UTC.
+
+    Parameters
+    ----------
+    timezone : pytz.tzinfo.DstTzInfo subclass
+
+    Returns
+    -------
+    datetime.datetime
+    """
+
+    now = (datetime.datetime.utcnow()
+                            .replace(tzinfo=pytz.utc)
+                            .astimezone(tz=timezone))
+    offset = now + datetime.timedelta(days=1)
+
+    # The implementation of tzinfo in pytz differs from that of the
+    # standard library. With a couple exceptions, you should therefore
+    # be using the localize method instead of the tzinfo parameter.
+    tomorrow_start_naive = datetime.datetime(year=offset.year,
+                                             month=offset.month,
+                                             day=offset.day)
+    tomorrow_start = timezone.localize(dt=tomorrow_start_naive)
+
+    return tomorrow_start.astimezone(tz=pytz.utc)
+
+
+def _get_tomorrow_in_seconds(timezone):
+
+    """
+    Get the start of tomorrow in seconds (i.e. as a Unix timestamp).
+
+    Parameters
+    ----------
+    timezone : pytz.tzinfo.DstTzInfo subclass
+
+    Returns
+    -------
+    float
+    """
+
+    epoch = datetime.datetime(year=1970, month=1, day=1, tzinfo=pytz.utc)
+    tomorrow_start = _get_tomorrow(timezone=timezone)
+    seconds = (tomorrow_start - epoch).total_seconds()
+
+    return seconds
 
 
 def get_all_from_today():
@@ -58,31 +122,6 @@ def get_all_from_today():
     redis_client = redis.StrictRedis(host=configuration['redis']['hostname'],
                                      port=configuration['redis']['port'])
 
-    now = datetime.datetime.utcnow()
-    now.replace(tzinfo=pytz.utc)
+    summary = redis_client.hgetall('attempt:1:summary')
 
-    results = [json.loads(result)
-               for result
-               in redis_client.lrange('log:all', 0, -1)]
-    for result in results:
-        result['created_at'] = dateutil.parser.parse(result['created_at'])
-
-    # The groupby function in Python expects input values to be sorted.
-    # Note this behavior differs from the GROUP BY clause in SQL. When
-    # performing nested operations, sort on the innermost key first.
-    sorted_results = sorted(results,
-                            key=lambda x: (x['habit_id'], x['created_at']))
-
-    # The returned groups are implemented as shared iterators. This
-    # intermediary step is therefore necessary when performing nested
-    # operations.
-    grouped_results = [
-        [key, list(group)]
-        for key, group
-        in itertools.groupby(iterable=sorted_results,
-                             key=lambda x: (x['created_at'].date(), x['habit_id']))]
-    for grouped_result in grouped_results:
-        grouped_result[1] = functools.reduce(lambda x, y: x + y['value'],
-                                             grouped_result[1],
-                                             0.0)
-    return grouped_results
+    return summary

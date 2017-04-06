@@ -12,12 +12,11 @@ if __name__ == '__main__':
         long_description = file.read()
 
     install_requires = ['protobuf==3.2.0',
-                        'python-dateutil==2.6.0',
                         'pytz==2016.10',
                         'redis==2.10.5']
 
     setuptools.setup(name=project_name,
-                     version='1.0.1',
+                     version='1.1.0',
                      description=description,
                      long_description=long_description,
                      url='https://github.com/dnguyen0304/mfit.git',
@@ -25,7 +24,7 @@ if __name__ == '__main__':
                      author_email='dnguyen0304@gmail.com',
                      license='MIT',
                      classifiers=['Programming Language :: Python :: 2.7'],
-                     packages=['mfit', 'mfit.protos'],
+                     packages=['mfit', 'mfit.models', 'mfit.protos'],
                      install_requires=install_requires,
                      test_suite='nose.collector',
                      tests_require=['nose'],
