@@ -125,6 +125,31 @@ def get_all_from_today():
     redis_client = redis.StrictRedis(host=configuration['redis']['hostname'],
                                      port=configuration['redis']['port'])
 
-    summary = redis_client.hgetall('attempt:1:summary')
+    now = datetime.datetime.utcnow()
+    now.replace(tzinfo=pytz.utc)
 
-    return summary
+    results = [json.loads(result)
+               for result
+               in redis_client.lrange('log:all', 0, -1)]
+    for result in results:
+        result['created_at'] = dateutil.parser.parse(result['created_at'])
+
+    # The groupby function in Python expects input values to be sorted.
+    # Note this behavior differs from the GROUP BY clause in SQL. When
+    # performing nested operations, sort on the innermost key first.
+    sorted_results = sorted(results,
+                            key=lambda x: (x['habit_id'], x['created_at']))
+
+    # The returned groups are implemented as shared iterators. This
+    # intermediary step is therefore necessary when performing nested
+    # operations.
+    grouped_results = [
+        [key, list(group)]
+        for key, group
+        in itertools.groupby(iterable=sorted_results,
+                             key=lambda x: (x['created_at'].date(), x['habit_id']))]
+    for grouped_result in grouped_results:
+        grouped_result[1] = functools.reduce(lambda x, y: x + y['value'],
+                                             grouped_result[1],
+                                             0.0)
+    return grouped_results

@@ -2,7 +2,6 @@
 
 ## v1.1.0 (Pending)
 ##### Features
-- Changed getting all logs from today to use summaries (`ME-617`).
 - Changed adding logs to use summaries (`ME-617`).
 - Added Event persistent storage (`ME-617`).
 - Added Event model (`ME-617`).
